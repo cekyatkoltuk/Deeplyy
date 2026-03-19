@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { FontFamily } from '../utils/theme';
 import {
     View,
     Text,
@@ -129,6 +130,7 @@ const styles = StyleSheet.create({
     backText: {
         color: Colors.primary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.medium,
     },
     loadingContainer: {
@@ -160,6 +162,7 @@ const styles = StyleSheet.create({
     onlineText: {
         color: Colors.online,
         fontSize: FontSizes.sm,
+        fontFamily: FontFamily.small,
         fontWeight: FontWeights.semiBold,
     },
     infoSection: {
@@ -170,11 +173,13 @@ const styles = StyleSheet.create({
     name: {
         color: Colors.textPrimary,
         fontSize: FontSizes.xxl,
+        fontFamily: FontFamily.heading,
         fontWeight: FontWeights.bold,
     },
     location: {
         color: Colors.textSecondary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         marginTop: Spacing.xs,
     },
     section: {
@@ -185,12 +190,14 @@ const styles = StyleSheet.create({
     sectionTitle: {
         color: Colors.textPrimary,
         fontSize: FontSizes.lg,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.bold,
         marginBottom: Spacing.md,
     },
     bioText: {
         color: Colors.textSecondary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         lineHeight: 24,
     },
     interestsGrid: {

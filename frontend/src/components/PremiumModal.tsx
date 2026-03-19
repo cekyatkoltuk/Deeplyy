@@ -8,7 +8,7 @@ import {
     TouchableWithoutFeedback,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Colors, FontSizes, FontWeights, BorderRadius, Spacing, Shadows } from '../utils/theme';
+import { Colors, FontSizes, FontWeights, BorderRadius, Spacing, Shadows, FontFamily } from '../utils/theme';
 import { PREMIUM_FEATURES } from '../utils/constants';
 import { Button } from './Button';
 
@@ -118,17 +118,21 @@ const styles = StyleSheet.create({
     },
     crown: {
         fontSize: 48,
+        fontFamily: FontFamily.heading,
+    
         marginBottom: Spacing.sm,
     },
     title: {
         color: Colors.premiumGold,
         fontSize: FontSizes.xxl,
+        fontFamily: FontFamily.heading,
         fontWeight: FontWeights.bold,
         marginBottom: Spacing.xs,
     },
     subtitle: {
         color: Colors.textSecondary,
         fontSize: FontSizes.md,
+        fontFamily: FontFamily.small,
         textAlign: 'center',
         lineHeight: 20,
     },
@@ -143,6 +147,8 @@ const styles = StyleSheet.create({
     },
     featureIcon: {
         fontSize: 24,
+        fontFamily: FontFamily.heading,
+    
         width: 36,
         textAlign: 'center',
     },
@@ -152,11 +158,13 @@ const styles = StyleSheet.create({
     featureTitle: {
         color: Colors.textPrimary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.semiBold,
     },
     featureDesc: {
         color: Colors.textMuted,
         fontSize: FontSizes.sm,
+        fontFamily: FontFamily.small,
     },
     pricing: {
         flexDirection: 'row',
@@ -185,22 +193,26 @@ const styles = StyleSheet.create({
     bestBadgeText: {
         color: Colors.black,
         fontSize: FontSizes.xs,
+        fontFamily: FontFamily.small,
         fontWeight: FontWeights.bold,
     },
     planName: {
         color: Colors.textPrimary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.semiBold,
         marginBottom: Spacing.xs,
     },
     planPrice: {
         color: Colors.premiumGold,
         fontSize: FontSizes.xl,
+        fontFamily: FontFamily.heading,
         fontWeight: FontWeights.bold,
     },
     planBilled: {
         color: Colors.textMuted,
         fontSize: FontSizes.xs,
+        fontFamily: FontFamily.small,
         marginTop: Spacing.xs,
     },
     closeBtn: {
@@ -210,5 +222,6 @@ const styles = StyleSheet.create({
     closeText: {
         color: Colors.textMuted,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
     },
 });

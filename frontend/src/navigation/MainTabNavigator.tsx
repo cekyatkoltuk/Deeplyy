@@ -1,8 +1,9 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Text, View, StyleSheet } from 'react-native';
-import { Colors, FontSizes, FontWeights, Spacing } from '../utils/theme';
+import { Text, View, StyleSheet, Image } from 'react-native';
+import { Colors, FontSizes, FontWeights, Spacing, FontFamily } from '../utils/theme';
+import { Ionicons } from '@expo/vector-icons';
 import { DiscoveryScreen } from '../screens/DiscoveryScreen';
 import { DiscoveryFiltersScreen } from '../screens/DiscoveryFiltersScreen';
 import { MatchesScreen } from '../screens/MatchesScreen';
@@ -63,47 +64,80 @@ const ProfileNavigator = () => (
     </ProfileStack.Navigator>
 );
 
+const CUSTOM_ICONS = {
+    matches: {
+        active: require('../../assets/icons/matches-active.png'),
+        inactive: require('../../assets/icons/matches-inactive.png'),
+    },
+    chat: {
+        active: require('../../assets/icons/chat-active.png'),
+        inactive: require('../../assets/icons/chat-inactive.png'),
+    },
+    likes: {
+        active: require('../../assets/icons/likes-active.png'),
+        inactive: require('../../assets/icons/likes-inactive.png'),
+    },
+    profile: {
+        active: require('../../assets/icons/profile-active.png'),
+        inactive: require('../../assets/icons/profile-inactive.png'),
+    },
+    discover: {
+        active: require('../../assets/icons/discover-active.png'),
+        inactive: require('../../assets/icons/discover-inactive.png'),
+    },
+};
+
 interface TabIconProps {
-    icon: string;
+    name: keyof typeof CUSTOM_ICONS;
     label: string;
     focused: boolean;
     badge?: number;
 }
 
-const TabIcon = ({ icon, label, focused, badge }: TabIconProps) => (
-    <View style={tabIconStyles.container}>
-        <Text style={[tabIconStyles.icon, focused && tabIconStyles.iconFocused]}>
-            {icon}
-        </Text>
-        {badge !== undefined && badge > 0 && (
-            <View style={tabIconStyles.badge}>
-                <Text style={tabIconStyles.badgeText}>{badge > 9 ? '9+' : badge}</Text>
+const TabIcon = ({ name, label, focused, badge }: TabIconProps) => {
+    const source = focused ? CUSTOM_ICONS[name].active : CUSTOM_ICONS[name].inactive;
+
+    return (
+        <View style={tabIconStyles.container}>
+            <View style={tabIconStyles.iconWrapper}>
+                <Image
+                    source={source}
+                    style={tabIconStyles.iconImage}
+                    resizeMode="contain"
+                />
+                {badge !== undefined && badge > 0 && (
+                    <View style={tabIconStyles.badge}>
+                        <Text style={tabIconStyles.badgeText}>{badge > 9 ? '9+' : badge}</Text>
+                    </View>
+                )}
             </View>
-        )}
-        <Text style={[tabIconStyles.label, focused && tabIconStyles.labelFocused]}>
-            {label}
-        </Text>
-    </View>
-);
+            <Text style={[tabIconStyles.label, focused && tabIconStyles.labelFocused]}>
+                {label}
+            </Text>
+        </View>
+    );
+};
 
 const tabIconStyles = StyleSheet.create({
     container: {
         alignItems: 'center',
         justifyContent: 'center',
         width: 60,
+        height: '100%',
+    },
+    iconWrapper: {
+        width: 26,
+        height: 26,
         position: 'relative',
     },
-    icon: {
-        fontSize: 24,
-        opacity: 0.5,
-    },
-    iconFocused: {
-        opacity: 1,
+    iconImage: {
+        width: 26,
+        height: 26,
     },
     badge: {
         position: 'absolute',
-        top: -4,
-        right: 6,
+        top: -6,
+        right: -8,
         backgroundColor: Colors.primary,
         borderRadius: 10,
         minWidth: 18,
@@ -115,16 +149,18 @@ const tabIconStyles = StyleSheet.create({
     badgeText: {
         color: Colors.white,
         fontSize: 10,
-        fontWeight: '700',
+        fontFamily: FontFamily.small,
+
     },
     label: {
         fontSize: 10,
+        fontFamily: FontFamily.small,
         color: Colors.textMuted,
         marginTop: 2,
     },
     labelFocused: {
         color: Colors.primary,
-        fontWeight: '600',
+
     },
 });
 
@@ -137,28 +173,19 @@ export const MainTabNavigator = () => {
                     backgroundColor: Colors.surface,
                     borderTopColor: Colors.border,
                     borderTopWidth: 1,
-                    height: 80,
-                    paddingTop: Spacing.sm,
-                    paddingBottom: Spacing.md,
+                    height: 65,
+                    paddingTop: 12,
+                    paddingBottom: 0,
                 },
                 tabBarShowLabel: false,
             }}
         >
             <Tab.Screen
-                name="DiscoveryTab"
-                component={DiscoveryNavigator}
-                options={{
-                    tabBarIcon: ({ focused }) => (
-                        <TabIcon icon="🔥" label="Discover" focused={focused} />
-                    ),
-                }}
-            />
-            <Tab.Screen
                 name="MatchesTab"
                 component={MatchesScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <TabIcon icon="💝" label="Matches" focused={focused} badge={2} />
+                        <TabIcon name="matches" label="Matches" focused={focused} badge={2} />
                     ),
                 }}
             />
@@ -167,7 +194,7 @@ export const MainTabNavigator = () => {
                 component={ChatNavigator}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <TabIcon icon="💬" label="Chat" focused={focused} badge={3} />
+                        <TabIcon name="chat" label="Chat" focused={focused} badge={3} />
                     ),
                 }}
             />
@@ -176,7 +203,7 @@ export const MainTabNavigator = () => {
                 component={LikesMeScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <TabIcon icon="❤️" label="Likes" focused={focused} badge={5} />
+                        <TabIcon name="likes" label="Likes" focused={focused} badge={5} />
                     ),
                 }}
             />
@@ -185,7 +212,16 @@ export const MainTabNavigator = () => {
                 component={ProfileNavigator}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <TabIcon icon="👤" label="Profile" focused={focused} />
+                        <TabIcon name="profile" label="Profile" focused={focused} />
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="DiscoveryTab"
+                component={DiscoveryNavigator}
+                options={{
+                    tabBarIcon: ({ focused }) => (
+                        <TabIcon name="discover" label="Discover" focused={focused} />
                     ),
                 }}
             />

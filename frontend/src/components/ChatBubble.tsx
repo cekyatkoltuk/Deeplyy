@@ -1,4 +1,5 @@
 import React from 'react';
+import { FontFamily } from '../utils/theme';
 import { View, Text, StyleSheet } from 'react-native';
 import { Colors, FontSizes, FontWeights, BorderRadius, Spacing } from '../utils/theme';
 import { Message } from '../utils/mockData';
@@ -60,6 +61,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         lineHeight: 22,
     },
     meText: {
@@ -77,6 +79,7 @@ const styles = StyleSheet.create({
     },
     time: {
         fontSize: FontSizes.xs,
+        fontFamily: FontFamily.small,
     },
     meTime: {
         color: 'rgba(255,255,255,0.7)',
@@ -86,6 +89,7 @@ const styles = StyleSheet.create({
     },
     readReceipt: {
         fontSize: FontSizes.xs,
+        fontFamily: FontFamily.small,
         color: 'rgba(255,255,255,0.5)',
     },
     readReceiptRead: {

@@ -1,4 +1,5 @@
 import React from 'react';
+import { FontFamily } from '../utils/theme';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Colors, FontSizes, FontWeights, BorderRadius, Spacing } from '../utils/theme';
 import { Avatar } from './Avatar';
@@ -96,11 +97,13 @@ const styles = StyleSheet.create({
     name: {
         color: Colors.textPrimary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.semiBold,
     },
     time: {
         color: Colors.textMuted,
         fontSize: FontSizes.xs,
+        fontFamily: FontFamily.small,
     },
     unreadTime: {
         color: Colors.primary,
@@ -114,6 +117,7 @@ const styles = StyleSheet.create({
         flex: 1,
         color: Colors.textMuted,
         fontSize: FontSizes.md,
+        fontFamily: FontFamily.small,
     },
     unreadMessage: {
         color: Colors.textSecondary,
@@ -122,6 +126,7 @@ const styles = StyleSheet.create({
     typing: {
         color: Colors.primary,
         fontSize: FontSizes.md,
+        fontFamily: FontFamily.small,
         fontStyle: 'italic',
     },
     badge: {
@@ -137,6 +142,7 @@ const styles = StyleSheet.create({
     badgeText: {
         color: Colors.white,
         fontSize: FontSizes.xs,
+        fontFamily: FontFamily.small,
         fontWeight: FontWeights.bold,
     },
 });

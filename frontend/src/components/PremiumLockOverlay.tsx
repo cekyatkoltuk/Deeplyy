@@ -1,4 +1,5 @@
 import React from 'react';
+import { FontFamily } from '../utils/theme';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Colors, FontSizes, FontWeights, BorderRadius, Spacing } from '../utils/theme';
 
@@ -41,14 +42,17 @@ const styles = StyleSheet.create({
     },
     lockIcon: {
         fontSize: 40,
+        fontFamily: FontFamily.heading,
     },
     message: {
         color: Colors.premiumGold,
         fontSize: FontSizes.lg,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.bold,
     },
     subtext: {
         color: Colors.textSecondary,
         fontSize: FontSizes.sm,
+        fontFamily: FontFamily.small,
     },
 });

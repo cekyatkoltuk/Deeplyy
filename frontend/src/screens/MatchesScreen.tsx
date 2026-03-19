@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { FontFamily } from '../utils/theme';
 import {
     View,
     Text,
@@ -10,6 +11,7 @@ import {
 import { Colors, FontSizes, FontWeights, Spacing, BorderRadius } from '../utils/theme';
 import { MatchCard } from '../components/MatchCard';
 import { Avatar } from '../components/Avatar';
+import { AppHeader } from '../components/AppHeader';
 import { useMatchStore } from '../store/matchStore';
 
 export const MatchesScreen = ({ navigation }: any) => {
@@ -31,6 +33,7 @@ export const MatchesScreen = ({ navigation }: any) => {
 
     return (
         <View style={styles.container}>
+            <AppHeader />
             {/* Header */}
             <View style={styles.header}>
                 <Text style={styles.title}>Matches</Text>
@@ -109,17 +112,19 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: Spacing.lg,
-        paddingTop: Spacing.xxl + Spacing.sm,
-        paddingBottom: Spacing.md,
+        paddingTop: Spacing.md,
+        paddingBottom: Spacing.sm,
     },
     title: {
         color: Colors.textPrimary,
         fontSize: FontSizes.xxl,
+        fontFamily: FontFamily.heading,
         fontWeight: FontWeights.bold,
     },
     count: {
         color: Colors.textMuted,
         fontSize: FontSizes.md,
+        fontFamily: FontFamily.small,
     },
     content: {
         flex: 1,
@@ -131,6 +136,7 @@ const styles = StyleSheet.create({
     sectionTitle: {
         color: Colors.textSecondary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.semiBold,
         marginBottom: Spacing.md,
     },
@@ -151,6 +157,7 @@ const styles = StyleSheet.create({
     recentName: {
         color: Colors.textPrimary,
         fontSize: FontSizes.sm,
+        fontFamily: FontFamily.small,
         fontWeight: FontWeights.medium,
         width: 70,
         textAlign: 'center',
@@ -163,19 +170,22 @@ const styles = StyleSheet.create({
     emptyState: {
         alignItems: 'center',
         justifyContent: 'center',
-        paddingTop: Spacing.xxxl,
+        marginTop: 150,
         gap: Spacing.md,
     },
     emptyIcon: {
         fontSize: 64,
+        fontFamily: FontFamily.heading,
     },
     emptyTitle: {
         color: Colors.textPrimary,
         fontSize: FontSizes.xl,
+        fontFamily: FontFamily.heading,
         fontWeight: FontWeights.bold,
     },
     emptySubtitle: {
         color: Colors.textSecondary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
     },
 });

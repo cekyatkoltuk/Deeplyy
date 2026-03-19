@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { FontFamily } from '../utils/theme';
 import {
     View,
     Text,
@@ -124,11 +125,13 @@ const styles = StyleSheet.create({
     backBtn: {
         color: Colors.primary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.medium,
     },
     title: {
         color: Colors.textPrimary,
         fontSize: FontSizes.lg,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.bold,
     },
     loadingContainer: {
@@ -161,11 +164,13 @@ const styles = StyleSheet.create({
     userName: {
         color: Colors.textPrimary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.semiBold,
     },
     userAge: {
         color: Colors.textMuted,
         fontSize: FontSizes.sm,
+        fontFamily: FontFamily.small,
         marginTop: 2,
     },
     unblockBtn: {
@@ -177,6 +182,7 @@ const styles = StyleSheet.create({
     unblockText: {
         color: Colors.white,
         fontSize: FontSizes.sm,
+        fontFamily: FontFamily.small,
         fontWeight: FontWeights.semiBold,
     },
     emptyContainer: {
@@ -191,14 +197,17 @@ const styles = StyleSheet.create({
     },
     emptyIcon: {
         fontSize: 64,
+        fontFamily: FontFamily.heading,
     },
     emptyTitle: {
         color: Colors.textPrimary,
         fontSize: FontSizes.xl,
+        fontFamily: FontFamily.heading,
         fontWeight: FontWeights.bold,
     },
     emptySubtitle: {
         color: Colors.textSecondary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
     },
 });

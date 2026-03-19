@@ -12,11 +12,15 @@ import {
     Alert,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Colors, FontSizes, FontWeights, Spacing, BorderRadius, Shadows } from '../utils/theme';
+import {
+  FontFamily,
+  Colors, FontSizes, FontWeights, Spacing, BorderRadius, Shadows
+} from '../utils/theme';
 import { Button } from '../components/Button';
 import { InterestTag } from '../components/InterestTag';
 import { Avatar } from '../components/Avatar';
 import { PremiumModal } from '../components/PremiumModal';
+import { AppHeader } from '../components/AppHeader';
 import { useUserStore } from '../store/userStore';
 import { usePremiumStore } from '../store/premiumStore';
 import { useAuthStore } from '../store/authStore';
@@ -86,6 +90,7 @@ export const ProfileScreen = ({ navigation }: any) => {
 
     return (
         <View style={styles.container}>
+            <AppHeader />
             <ScrollView contentContainerStyle={styles.scrollContent}>
                 {/* Profile Header */}
                 <View style={styles.profileHeader}>
@@ -368,8 +373,8 @@ const styles = StyleSheet.create({
     },
     profileHeader: {
         alignItems: 'center',
-        paddingTop: Spacing.xxl + Spacing.lg,
-        paddingBottom: Spacing.lg,
+        paddingTop: Spacing.md,
+        paddingBottom: Spacing.sm,
     },
     avatarContainer: {
         position: 'relative',
@@ -390,15 +395,19 @@ const styles = StyleSheet.create({
     },
     editAvatarIcon: {
         fontSize: 14,
+        fontFamily: FontFamily.small,
+    
     },
     profileName: {
         color: Colors.textPrimary,
         fontSize: FontSizes.xl,
+        fontFamily: FontFamily.heading,
         fontWeight: FontWeights.bold,
     },
     profileLocation: {
         color: Colors.textSecondary,
         fontSize: FontSizes.md,
+        fontFamily: FontFamily.small,
         marginTop: Spacing.xs,
     },
     premiumTag: {
@@ -411,6 +420,7 @@ const styles = StyleSheet.create({
     premiumTagText: {
         color: Colors.premiumGold,
         fontSize: FontSizes.sm,
+        fontFamily: FontFamily.small,
         fontWeight: FontWeights.semiBold,
     },
     premiumCta: {
@@ -428,6 +438,8 @@ const styles = StyleSheet.create({
     },
     premiumCtaIcon: {
         fontSize: 32,
+        fontFamily: FontFamily.heading,
+    
     },
     premiumCtaText: {
         flex: 1,
@@ -435,14 +447,17 @@ const styles = StyleSheet.create({
     premiumCtaTitle: {
         color: Colors.black,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.bold,
     },
     premiumCtaSubtitle: {
         color: 'rgba(0,0,0,0.6)',
         fontSize: FontSizes.sm,
+        fontFamily: FontFamily.small,
     },
     premiumCtaArrow: {
         fontSize: FontSizes.xxl,
+        fontFamily: FontFamily.heading,
         color: 'rgba(0,0,0,0.4)',
     },
     section: {
@@ -458,16 +473,19 @@ const styles = StyleSheet.create({
     sectionTitle: {
         color: Colors.textPrimary,
         fontSize: FontSizes.lg,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.bold,
     },
     editBtn: {
         color: Colors.primary,
         fontSize: FontSizes.md,
+        fontFamily: FontFamily.small,
         fontWeight: FontWeights.semiBold,
     },
     bioText: {
         color: Colors.textSecondary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         lineHeight: 24,
     },
     bioInput: {
@@ -476,6 +494,7 @@ const styles = StyleSheet.create({
         padding: Spacing.md,
         color: Colors.textPrimary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         lineHeight: 24,
         minHeight: 100,
         textAlignVertical: 'top',
@@ -485,6 +504,7 @@ const styles = StyleSheet.create({
     charCount: {
         color: Colors.textMuted,
         fontSize: FontSizes.xs,
+        fontFamily: FontFamily.small,
         textAlign: 'right',
         marginTop: Spacing.xs,
     },
@@ -521,6 +541,7 @@ const styles = StyleSheet.create({
     mainPhotoText: {
         color: Colors.white,
         fontSize: FontSizes.xs,
+        fontFamily: FontFamily.small,
         fontWeight: FontWeights.bold,
     },
     removePhotoBadge: {
@@ -537,6 +558,8 @@ const styles = StyleSheet.create({
     removePhotoText: {
         color: Colors.white,
         fontSize: 12,
+        fontFamily: FontFamily.small,
+    
         fontWeight: FontWeights.bold,
     },
     setMainHint: {
@@ -551,6 +574,8 @@ const styles = StyleSheet.create({
     setMainText: {
         color: Colors.white,
         fontSize: 9,
+        fontFamily: FontFamily.small,
+    
         fontWeight: FontWeights.medium,
     },
     photoSlot: {
@@ -566,6 +591,8 @@ const styles = StyleSheet.create({
     },
     addPhotoIcon: {
         fontSize: 28,
+        fontFamily: FontFamily.heading,
+    
         color: Colors.textMuted,
     },
     interestsGrid: {
@@ -583,6 +610,8 @@ const styles = StyleSheet.create({
     },
     settingIcon: {
         fontSize: 22,
+        fontFamily: FontFamily.body,
+    
         width: 32,
         textAlign: 'center',
     },
@@ -590,10 +619,12 @@ const styles = StyleSheet.create({
         flex: 1,
         color: Colors.textPrimary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
     },
     settingArrow: {
         color: Colors.textMuted,
         fontSize: FontSizes.xl,
+        fontFamily: FontFamily.heading,
     },
     subscriptionCard: {
         backgroundColor: Colors.card,
@@ -606,15 +637,18 @@ const styles = StyleSheet.create({
     subscriptionPlan: {
         color: Colors.premiumGold,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.semiBold,
     },
     subscriptionDate: {
         color: Colors.textSecondary,
         fontSize: FontSizes.sm,
+        fontFamily: FontFamily.small,
     },
     manageSub: {
         color: Colors.primary,
         fontSize: FontSizes.md,
+        fontFamily: FontFamily.small,
         fontWeight: FontWeights.medium,
         marginTop: Spacing.xs,
     },
@@ -626,6 +660,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: Colors.textMuted,
         fontSize: FontSizes.sm,
+        fontFamily: FontFamily.small,
         marginTop: Spacing.lg,
     },
     // Modal styles
@@ -646,12 +681,14 @@ const styles = StyleSheet.create({
     modalTitle: {
         color: Colors.textPrimary,
         fontSize: FontSizes.xl,
+        fontFamily: FontFamily.heading,
         fontWeight: FontWeights.bold,
         marginBottom: Spacing.xs,
     },
     modalSubtitle: {
         color: Colors.textSecondary,
         fontSize: FontSizes.md,
+        fontFamily: FontFamily.small,
         marginBottom: Spacing.md,
     },
     modalInput: {
@@ -660,6 +697,7 @@ const styles = StyleSheet.create({
         padding: Spacing.md,
         color: Colors.textPrimary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         borderWidth: 1,
         borderColor: Colors.border,
         marginBottom: Spacing.md,
@@ -676,6 +714,7 @@ const styles = StyleSheet.create({
     modalCancelText: {
         color: Colors.textSecondary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.medium,
     },
     modalAddBtn: {
@@ -690,6 +729,7 @@ const styles = StyleSheet.create({
     modalAddText: {
         color: Colors.white,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.semiBold,
     },
 });

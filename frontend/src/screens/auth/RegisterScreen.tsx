@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FontFamily } from '../../utils/theme';
 import {
     View,
     Text,
@@ -157,11 +158,13 @@ const styles = StyleSheet.create({
     backBtn: {
         color: Colors.primary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.medium,
         marginBottom: Spacing.md,
     },
     title: {
         fontSize: FontSizes.xxxl,
+        fontFamily: FontFamily.heading,
         fontWeight: FontWeights.bold,
         color: Colors.textPrimary,
         marginBottom: Spacing.xs,
@@ -169,16 +172,19 @@ const styles = StyleSheet.create({
     subtitle: {
         color: Colors.textSecondary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
     },
     form: {
         gap: Spacing.xs,
     },
     icon: {
         fontSize: 18,
+        fontFamily: FontFamily.body,
     },
     terms: {
         color: Colors.textMuted,
         fontSize: FontSizes.sm,
+        fontFamily: FontFamily.small,
         textAlign: 'center',
         marginTop: Spacing.sm,
         lineHeight: 18,
@@ -195,10 +201,12 @@ const styles = StyleSheet.create({
     footerText: {
         color: Colors.textSecondary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
     },
     footerLink: {
         color: Colors.primary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.semiBold,
     },
 });

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FontFamily } from '../../utils/theme';
 import {
     View,
     Text,
@@ -139,10 +140,12 @@ const styles = StyleSheet.create({
     },
     logoIcon: {
         fontSize: 64,
+        fontFamily: FontFamily.heading,
         marginBottom: Spacing.sm,
     },
     logoText: {
         fontSize: FontSizes.hero,
+        fontFamily: FontFamily.heading,
         fontWeight: FontWeights.extraBold,
         color: Colors.primary,
         letterSpacing: 2,
@@ -150,6 +153,7 @@ const styles = StyleSheet.create({
     tagline: {
         color: Colors.textSecondary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         marginTop: Spacing.xs,
     },
     form: {
@@ -157,6 +161,7 @@ const styles = StyleSheet.create({
     },
     inputIcon: {
         fontSize: 18,
+        fontFamily: FontFamily.body,
     },
     forgotBtn: {
         alignSelf: 'flex-end',
@@ -165,6 +170,7 @@ const styles = StyleSheet.create({
     forgotText: {
         color: Colors.primary,
         fontSize: FontSizes.sm,
+        fontFamily: FontFamily.small,
         fontWeight: FontWeights.medium,
     },
     divider: {
@@ -181,9 +187,11 @@ const styles = StyleSheet.create({
         color: Colors.textMuted,
         paddingHorizontal: Spacing.md,
         fontSize: FontSizes.sm,
+        fontFamily: FontFamily.small,
     },
     socialIcon: {
         fontSize: 20,
+        fontFamily: FontFamily.body,
     },
     footer: {
         flexDirection: 'row',
@@ -193,10 +201,12 @@ const styles = StyleSheet.create({
     footerText: {
         color: Colors.textSecondary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
     },
     footerLink: {
         color: Colors.primary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.semiBold,
     },
 });

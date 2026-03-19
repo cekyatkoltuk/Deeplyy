@@ -8,7 +8,10 @@ import {
     Image,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Colors, FontSizes, FontWeights, Spacing, BorderRadius, Shadows } from '../../utils/theme';
+import {
+  FontFamily,
+  Colors, FontSizes, FontWeights, Spacing, BorderRadius, Shadows
+} from '../../utils/theme';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { InterestTag } from '../../components/InterestTag';
@@ -183,6 +186,7 @@ const styles = StyleSheet.create({
     },
     stepTitle: {
         fontSize: FontSizes.xxl,
+        fontFamily: FontFamily.heading,
         fontWeight: FontWeights.bold,
         color: Colors.textPrimary,
         marginBottom: Spacing.xs,
@@ -190,6 +194,7 @@ const styles = StyleSheet.create({
     stepSubtitle: {
         color: Colors.textSecondary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         marginBottom: Spacing.xl,
     },
     photoGrid: {
@@ -210,11 +215,14 @@ const styles = StyleSheet.create({
     },
     addPhotoIcon: {
         fontSize: 28,
+        fontFamily: FontFamily.heading,
+    
         color: Colors.textMuted,
     },
     mainLabel: {
         color: Colors.primary,
         fontSize: FontSizes.xs,
+        fontFamily: FontFamily.small,
         fontWeight: FontWeights.semiBold,
         marginTop: Spacing.xs,
     },
@@ -224,6 +232,7 @@ const styles = StyleSheet.create({
     sectionLabel: {
         color: Colors.textSecondary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.semiBold,
         marginBottom: Spacing.md,
     },
@@ -247,10 +256,13 @@ const styles = StyleSheet.create({
     },
     genderIcon: {
         fontSize: 32,
+        fontFamily: FontFamily.heading,
+    
     },
     genderText: {
         color: Colors.textSecondary,
         fontSize: FontSizes.md,
+        fontFamily: FontFamily.small,
         fontWeight: FontWeights.medium,
     },
     genderSelectedText: {

@@ -1,4 +1,5 @@
 import React from 'react';
+import { FontFamily } from '../utils/theme';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { Colors, FontSizes, FontWeights, BorderRadius, Spacing, Shadows } from '../utils/theme';
 import { Avatar } from './Avatar';
@@ -54,6 +55,7 @@ const styles = StyleSheet.create({
     newBadgeText: {
         color: Colors.white,
         fontSize: FontSizes.xs,
+        fontFamily: FontFamily.small,
         fontWeight: FontWeights.bold,
     },
     onlineDot: {
@@ -73,6 +75,7 @@ const styles = StyleSheet.create({
     name: {
         color: Colors.textPrimary,
         fontSize: FontSizes.sm,
+        fontFamily: FontFamily.small,
         fontWeight: FontWeights.semiBold,
     },
 });

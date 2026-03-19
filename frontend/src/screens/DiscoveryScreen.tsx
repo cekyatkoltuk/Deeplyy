@@ -10,10 +10,14 @@ import {
     Modal,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Colors, FontSizes, FontWeights, Spacing, BorderRadius, Shadows } from '../utils/theme';
+import {
+  FontFamily,
+  Colors, FontSizes, FontWeights, Spacing, BorderRadius, Shadows
+} from '../utils/theme';
 import { SwipeCard, CARD_WIDTH, CARD_HEIGHT } from '../components/SwipeCard';
 import { PremiumModal } from '../components/PremiumModal';
 import { Button } from '../components/Button';
+import { AppHeader } from '../components/AppHeader';
 import { useSwipeStore } from '../store/swipeStore';
 import { useMatchStore } from '../store/matchStore';
 import { usePremiumStore } from '../store/premiumStore';
@@ -135,17 +139,7 @@ export const DiscoveryScreen = ({ navigation }: any) => {
 
     return (
         <View style={styles.container}>
-            {/* Header */}
-            <View style={styles.header}>
-                <Text style={styles.logo}>🔥 Flame</Text>
-                <TouchableOpacity
-                    style={styles.filterBtn}
-                    onPress={() => navigation.navigate('DiscoveryFilters')}
-                >
-                    <Text style={styles.filterIcon}>⚙️</Text>
-                    {!isPremium && <Text style={styles.lockBadge}>🔒</Text>}
-                </TouchableOpacity>
-            </View>
+            <AppHeader />
 
             {/* Card Stack */}
             <View style={styles.cardStack}>
@@ -300,11 +294,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: Spacing.lg,
-        paddingTop: Spacing.xxl + Spacing.sm,
+        paddingTop: Spacing.xl,
         paddingBottom: Spacing.sm,
     },
     logo: {
         fontSize: FontSizes.xl,
+        fontFamily: FontFamily.heading,
         fontWeight: FontWeights.bold,
         color: Colors.primary,
     },
@@ -315,9 +310,13 @@ const styles = StyleSheet.create({
     },
     filterIcon: {
         fontSize: 24,
+        fontFamily: FontFamily.heading,
+    
     },
     lockBadge: {
         fontSize: 12,
+        fontFamily: FontFamily.small,
+    
         marginLeft: -4,
         marginTop: -8,
     },
@@ -353,6 +352,7 @@ const styles = StyleSheet.create({
     },
     stampText: {
         fontSize: FontSizes.xxl,
+        fontFamily: FontFamily.heading,
         fontWeight: FontWeights.extraBold,
         color: Colors.like,
         letterSpacing: 3,
@@ -402,12 +402,16 @@ const styles = StyleSheet.create({
     },
     actionIcon: {
         fontSize: 24,
+        fontFamily: FontFamily.heading,
+    
     },
     actionLock: {
         position: 'absolute',
         top: -4,
         right: -4,
         fontSize: 12,
+        fontFamily: FontFamily.small,
+    
     },
     emptyState: {
         alignItems: 'center',
@@ -415,15 +419,19 @@ const styles = StyleSheet.create({
     },
     emptyIcon: {
         fontSize: 72,
+        fontFamily: FontFamily.heading,
+    
     },
     emptyTitle: {
         color: Colors.textPrimary,
         fontSize: FontSizes.xl,
+        fontFamily: FontFamily.heading,
         fontWeight: FontWeights.bold,
     },
     emptySubtitle: {
         color: Colors.textSecondary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
     },
     resetBtn: {
         marginTop: Spacing.md,
@@ -435,6 +443,7 @@ const styles = StyleSheet.create({
     resetText: {
         color: Colors.textPrimary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.semiBold,
     },
     matchModalBackdrop: {
@@ -452,21 +461,26 @@ const styles = StyleSheet.create({
     },
     matchEmoji: {
         fontSize: 64,
+        fontFamily: FontFamily.heading,
+    
     },
     matchTitle: {
         fontSize: FontSizes.xxxl,
+        fontFamily: FontFamily.heading,
         fontWeight: FontWeights.extraBold,
         color: Colors.white,
     },
     matchSubtitle: {
         color: 'rgba(255,255,255,0.9)',
         fontSize: FontSizes.lg,
+        fontFamily: FontFamily.body,
         textAlign: 'center',
         marginBottom: Spacing.md,
     },
     keepSwiping: {
         color: 'rgba(255,255,255,0.7)',
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         marginTop: Spacing.sm,
     },
 });

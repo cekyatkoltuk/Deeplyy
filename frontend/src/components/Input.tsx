@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FontFamily } from '../utils/theme';
 import { View, TextInput, Text, StyleSheet, ViewStyle, TextInputProps } from 'react-native';
 import { Colors, FontSizes, FontWeights, BorderRadius, Spacing } from '../utils/theme';
 
@@ -49,6 +50,7 @@ const styles = StyleSheet.create({
     label: {
         color: Colors.textSecondary,
         fontSize: FontSizes.sm,
+        fontFamily: FontFamily.small,
         fontWeight: FontWeights.medium,
         marginBottom: Spacing.xs,
         marginLeft: Spacing.xs,
@@ -74,6 +76,7 @@ const styles = StyleSheet.create({
         flex: 1,
         color: Colors.textPrimary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         paddingVertical: Spacing.md,
         paddingHorizontal: Spacing.md,
     },
@@ -83,6 +86,7 @@ const styles = StyleSheet.create({
     error: {
         color: Colors.error,
         fontSize: FontSizes.xs,
+        fontFamily: FontFamily.small,
         marginTop: Spacing.xs,
         marginLeft: Spacing.xs,
     },

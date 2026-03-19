@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
+import { FontFamily } from '../utils/theme';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { Colors, FontSizes, FontWeights, Spacing } from '../utils/theme';
 import { ConversationItem } from '../components/ConversationItem';
+import { AppHeader } from '../components/AppHeader';
 import { useChatStore } from '../store/chatStore';
 
 export const ChatListScreen = ({ navigation }: any) => {
@@ -13,6 +15,7 @@ export const ChatListScreen = ({ navigation }: any) => {
 
     return (
         <View style={styles.container}>
+            <AppHeader />
             {/* Header */}
             <View style={styles.header}>
                 <Text style={styles.title}>Messages</Text>
@@ -65,17 +68,19 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: Spacing.lg,
-        paddingTop: Spacing.xxl + Spacing.sm,
-        paddingBottom: Spacing.md,
+        paddingTop: Spacing.md,
+        paddingBottom: Spacing.sm,
     },
     title: {
         color: Colors.textPrimary,
         fontSize: FontSizes.xxl,
+        fontFamily: FontFamily.heading,
         fontWeight: FontWeights.bold,
     },
     count: {
         color: Colors.primary,
         fontSize: FontSizes.md,
+        fontFamily: FontFamily.small,
         fontWeight: FontWeights.medium,
     },
     separator: {
@@ -87,22 +92,24 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     emptyState: {
-        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
         gap: Spacing.md,
-        paddingTop: Spacing.xxxl,
+        marginTop: 150,
     },
     emptyIcon: {
         fontSize: 64,
+        fontFamily: FontFamily.heading,
     },
     emptyTitle: {
         color: Colors.textPrimary,
         fontSize: FontSizes.xl,
+        fontFamily: FontFamily.heading,
         fontWeight: FontWeights.bold,
     },
     emptySubtitle: {
         color: Colors.textSecondary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
     },
 });

@@ -1,42 +1,42 @@
 export const Colors = {
-  primary: '#FF6B6B',
-  primaryGradientStart: '#FF6B6B',
-  primaryGradientEnd: '#EE5A24',
-  accent: '#A855F7',
-  accentGradientStart: '#A855F7',
-  accentGradientEnd: '#6366F1',
-  like: '#4ADE80',
-  pass: '#F87171',
+  primary: '#EB3223', // Chili Red
+  primaryGradientStart: '#EB3223',
+  primaryGradientEnd: '#EB5F23', // Flame
+  accent: '#EB5F23',
+  accentGradientStart: '#EB5F23',
+  accentGradientEnd: '#EB3223',
+  like: '#35FD5A', // Erin
+  pass: '#EB3223',
   superLike: '#38BDF8',
   gold: '#FBBF24',
 
   // Backgrounds
-  background: '#0F0F1A',
-  surface: '#1A1A2E',
-  surfaceLight: '#252542',
-  card: '#1E1E35',
-  cardHover: '#2A2A4A',
+  background: '#302D28', // Light black
+  surface: '#2A2722', // Dark black
+  surfaceLight: '#3D3932',
+  card: '#2A2722',
+  cardHover: '#3D3932',
 
   // Text
-  textPrimary: '#FFFFFF',
+  textPrimary: '#FFFFFF', // White
   textSecondary: '#A0A0C0',
   textMuted: '#6B6B8D',
   textOnPrimary: '#FFFFFF',
 
   // Borders & misc
-  border: '#2A2A4A',
-  divider: '#252542',
-  overlay: 'rgba(0,0,0,0.6)',
+  border: '#2A2722',
+  divider: '#2A2722',
+  overlay: 'rgba(42,39,34,0.8)',
   premiumGold: '#FFD700',
   premiumGradientStart: '#FFD700',
   premiumGradientEnd: '#FFA500',
 
   // Status
-  online: '#4ADE80',
-  offline: '#6B6B8D',
-  error: '#EF4444',
-  success: '#22C55E',
-  warning: '#F59E0B',
+  online: '#35FD5A', // User Online
+  offline: '#EB5F23', // User Away
+  error: '#EB3223',
+  success: '#35FD5A',
+  warning: '#EB5F23',
 
   white: '#FFFFFF',
   black: '#000000',
@@ -63,6 +63,18 @@ export const FontSizes = {
   xxl: 28,
   xxxl: 36,
   hero: 48,
+};
+
+export const FontFamily = {
+  small: 'MuseoModerno_300Light_Italic',
+  body: 'Karla_700Bold_Italic',
+  heading: 'Archivo_700Bold',
+  
+  // Aliases for compatibility
+  regular: 'MuseoModerno_300Light_Italic',
+  medium: 'Karla_700Bold_Italic',
+  semiBold: 'Karla_700Bold_Italic',
+  bold: 'Archivo_700Bold',
 };
 
 export const FontWeights = {

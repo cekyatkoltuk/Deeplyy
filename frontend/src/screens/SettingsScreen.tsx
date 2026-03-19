@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FontFamily } from '../utils/theme';
 import {
     View,
     Text,
@@ -184,11 +185,13 @@ const styles = StyleSheet.create({
     backBtn: {
         color: Colors.primary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.medium,
     },
     title: {
         color: Colors.textPrimary,
         fontSize: FontSizes.lg,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.bold,
     },
     scrollContent: {
@@ -201,6 +204,7 @@ const styles = StyleSheet.create({
     sectionTitle: {
         color: Colors.textSecondary,
         fontSize: FontSizes.sm,
+        fontFamily: FontFamily.small,
         fontWeight: FontWeights.semiBold,
         textTransform: 'uppercase',
         letterSpacing: 1,
@@ -217,11 +221,13 @@ const styles = StyleSheet.create({
     settingText: {
         color: Colors.textPrimary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         flex: 1,
     },
     arrow: {
         color: Colors.textMuted,
         fontSize: FontSizes.xl,
+        fontFamily: FontFamily.heading,
     },
     segmentControl: {
         flexDirection: 'row',
@@ -239,6 +245,7 @@ const styles = StyleSheet.create({
     segmentText: {
         color: Colors.textMuted,
         fontSize: FontSizes.md,
+        fontFamily: FontFamily.small,
         fontWeight: FontWeights.medium,
     },
     segmentTextActive: {
@@ -250,6 +257,7 @@ const styles = StyleSheet.create({
     dangerText: {
         color: Colors.error,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         flex: 1,
     },
     logoutBtn: {

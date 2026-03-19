@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { FontFamily } from '../utils/theme';
 import {
     View,
     Text,
@@ -9,6 +10,7 @@ import {
 } from 'react-native';
 import { Colors, FontSizes, FontWeights, Spacing, BorderRadius, Shadows } from '../utils/theme';
 import { InterestTag } from '../components/InterestTag';
+import { AppHeader } from '../components/AppHeader';
 import api from '../services/api';
 
 interface LikeUser {
@@ -69,6 +71,7 @@ export const LikesMeScreen = () => {
 
     return (
         <View style={styles.container}>
+            <AppHeader />
             <View style={styles.header}>
                 <Text style={styles.title}>Likes You</Text>
                 <View style={styles.badge}>
@@ -109,12 +112,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         paddingHorizontal: Spacing.lg,
-        paddingTop: Spacing.xxl + Spacing.sm,
+        paddingTop: Spacing.md,
+        paddingBottom: Spacing.sm,
         gap: Spacing.sm,
     },
     title: {
         color: Colors.textPrimary,
         fontSize: FontSizes.xxl,
+        fontFamily: FontFamily.heading,
         fontWeight: FontWeights.bold,
     },
     badge: {
@@ -126,11 +131,13 @@ const styles = StyleSheet.create({
     badgeText: {
         color: Colors.white,
         fontSize: FontSizes.sm,
+        fontFamily: FontFamily.small,
         fontWeight: FontWeights.bold,
     },
     subtitle: {
         color: Colors.textSecondary,
         fontSize: FontSizes.md,
+        fontFamily: FontFamily.small,
         paddingHorizontal: Spacing.lg,
         marginTop: Spacing.xs,
         marginBottom: Spacing.md,
@@ -173,6 +180,7 @@ const styles = StyleSheet.create({
     name: {
         color: Colors.textPrimary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.semiBold,
         marginBottom: Spacing.xs,
     },
@@ -184,10 +192,12 @@ const styles = StyleSheet.create({
     location: {
         color: Colors.textMuted,
         fontSize: FontSizes.xs,
+        fontFamily: FontFamily.small,
     },
     distance: {
         color: Colors.textMuted,
         fontSize: FontSizes.xs,
+        fontFamily: FontFamily.small,
     },
     interests: {
         flexDirection: 'row',
@@ -210,22 +220,26 @@ const styles = StyleSheet.create({
     likeAction: {},
     actionText: {
         fontSize: 20,
+        fontFamily: FontFamily.body,
     },
     emptyState: {
         alignItems: 'center',
         gap: Spacing.md,
-        paddingTop: Spacing.xxxl,
+        marginTop: 150,
     },
     emptyIcon: {
         fontSize: 64,
+        fontFamily: FontFamily.heading,
     },
     emptyTitle: {
         color: Colors.textPrimary,
         fontSize: FontSizes.xl,
+        fontFamily: FontFamily.heading,
         fontWeight: FontWeights.bold,
     },
     emptySubtitle: {
         color: Colors.textSecondary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
     },
 });

@@ -1,4 +1,5 @@
 import React from 'react';
+import { FontFamily } from '../utils/theme';
 import {
     TouchableOpacity,
     Text,
@@ -36,9 +37,9 @@ export const Button: React.FC<ButtonProps> = ({
     fullWidth = false,
 }) => {
     const sizeStyles = {
-        small: { paddingVertical: Spacing.sm, paddingHorizontal: Spacing.md, fontSize: FontSizes.sm },
-        medium: { paddingVertical: Spacing.md, paddingHorizontal: Spacing.lg, fontSize: FontSizes.body },
-        large: { paddingVertical: Spacing.lg, paddingHorizontal: Spacing.xl, fontSize: FontSizes.lg },
+        small: { paddingVertical: Spacing.sm, paddingHorizontal: Spacing.md, fontSize: FontSizes.sm, fontFamily: FontFamily.small },
+        medium: { paddingVertical: Spacing.md, paddingHorizontal: Spacing.lg, fontSize: FontSizes.body, fontFamily: FontFamily.body },
+        large: { paddingVertical: Spacing.lg, paddingHorizontal: Spacing.xl, fontSize: FontSizes.lg, fontFamily: FontFamily.body },
     };
 
     const renderContent = () => (
@@ -51,7 +52,7 @@ export const Button: React.FC<ButtonProps> = ({
                     <Text
                         style={[
                             styles.text,
-                            { fontSize: sizeStyles[size].fontSize },
+                            { fontSize: sizeStyles[size].fontSize, fontFamily: sizeStyles[size].fontFamily },
                             variant === 'outline' && styles.outlineText,
                             variant === 'ghost' && styles.ghostText,
                             textStyle,

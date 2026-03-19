@@ -1,4 +1,5 @@
 import React from 'react';
+import { FontFamily } from '../utils/theme';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors, FontSizes, FontWeights, BorderRadius, Spacing, Shadows } from '../utils/theme';
@@ -87,15 +88,18 @@ const styles = StyleSheet.create({
     name: {
         color: Colors.white,
         fontSize: FontSizes.xxl,
+        fontFamily: FontFamily.heading,
         fontWeight: FontWeights.bold,
     },
     age: {
         color: Colors.white,
         fontSize: FontSizes.xl,
+        fontFamily: FontFamily.heading,
         fontWeight: FontWeights.light,
     },
     premiumBadge: {
         fontSize: 20,
+        fontFamily: FontFamily.body,
         marginLeft: Spacing.xs,
     },
     locationRow: {
@@ -106,10 +110,12 @@ const styles = StyleSheet.create({
     },
     locationIcon: {
         fontSize: 14,
+        fontFamily: FontFamily.small,
     },
     location: {
         color: Colors.textSecondary,
         fontSize: FontSizes.md,
+        fontFamily: FontFamily.small,
     },
     onlineDot: {
         width: 8,
@@ -121,6 +127,7 @@ const styles = StyleSheet.create({
     bio: {
         color: Colors.textSecondary,
         fontSize: FontSizes.md,
+        fontFamily: FontFamily.small,
         marginBottom: Spacing.md,
         lineHeight: 20,
     },

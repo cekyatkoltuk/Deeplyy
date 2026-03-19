@@ -1,4 +1,5 @@
 import React from 'react';
+import { FontFamily } from '../utils/theme';
 import { View, Image, StyleSheet, Text } from 'react-native';
 import { Colors, BorderRadius, FontSizes, FontWeights } from '../utils/theme';
 
@@ -102,5 +103,6 @@ const styles = StyleSheet.create({
     },
     premiumIcon: {
         fontSize: 14,
+        fontFamily: FontFamily.small,
     },
 });

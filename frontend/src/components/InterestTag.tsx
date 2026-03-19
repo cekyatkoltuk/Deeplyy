@@ -1,4 +1,5 @@
 import React from 'react';
+import { FontFamily } from '../utils/theme';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Colors, FontSizes, FontWeights, BorderRadius, Spacing } from '../utils/theme';
 
@@ -59,6 +60,7 @@ const styles = StyleSheet.create({
     text: {
         color: Colors.textSecondary,
         fontSize: FontSizes.md,
+        fontFamily: FontFamily.small,
         fontWeight: FontWeights.medium,
     },
     selectedText: {
@@ -66,5 +68,6 @@ const styles = StyleSheet.create({
     },
     smallText: {
         fontSize: FontSizes.sm,
+        fontFamily: FontFamily.small,
     },
 });

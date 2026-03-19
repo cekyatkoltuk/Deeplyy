@@ -7,7 +7,10 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
-import { Colors, FontSizes, FontWeights, Spacing, BorderRadius } from '../utils/theme';
+import {
+  FontFamily,
+  Colors, FontSizes, FontWeights, Spacing, BorderRadius
+} from '../utils/theme';
 import { InterestTag } from '../components/InterestTag';
 import { PremiumLockOverlay } from '../components/PremiumLockOverlay';
 import { PremiumModal } from '../components/PremiumModal';
@@ -192,16 +195,19 @@ const styles = StyleSheet.create({
     backBtn: {
         color: Colors.primary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.medium,
     },
     title: {
         color: Colors.textPrimary,
         fontSize: FontSizes.lg,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.bold,
     },
     doneBtn: {
         color: Colors.primary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.semiBold,
     },
     content: {
@@ -224,6 +230,8 @@ const styles = StyleSheet.create({
     },
     premiumBannerIcon: {
         fontSize: 28,
+        fontFamily: FontFamily.heading,
+    
     },
     premiumBannerText: {
         flex: 1,
@@ -231,11 +239,13 @@ const styles = StyleSheet.create({
     premiumBannerTitle: {
         color: Colors.premiumGold,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.semiBold,
     },
     premiumBannerSubtitle: {
         color: Colors.textMuted,
         fontSize: FontSizes.sm,
+        fontFamily: FontFamily.small,
     },
     filtersWrapper: {
         position: 'relative',
@@ -253,17 +263,20 @@ const styles = StyleSheet.create({
     filterLabel: {
         color: Colors.textPrimary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.semiBold,
         marginBottom: Spacing.sm,
     },
     filterValue: {
         color: Colors.primary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.semiBold,
     },
     filterSubtext: {
         color: Colors.textMuted,
         fontSize: FontSizes.sm,
+        fontFamily: FontFamily.small,
         marginBottom: Spacing.md,
     },
     slider: {
@@ -280,15 +293,19 @@ const styles = StyleSheet.create({
     },
     locationIcon: {
         fontSize: 18,
+        fontFamily: FontFamily.body,
+    
     },
     locationText: {
         flex: 1,
         color: Colors.textPrimary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
     },
     locationArrow: {
         color: Colors.textMuted,
         fontSize: FontSizes.xl,
+        fontFamily: FontFamily.heading,
     },
     interestsGrid: {
         flexDirection: 'row',

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { FontFamily } from '../utils/theme';
 import {
     View,
     Text,
@@ -234,6 +235,7 @@ const styles = StyleSheet.create({
     backText: {
         color: Colors.primary,
         fontSize: FontSizes.xl,
+        fontFamily: FontFamily.heading,
         fontWeight: FontWeights.bold,
     },
     headerProfile: {
@@ -248,11 +250,13 @@ const styles = StyleSheet.create({
     headerName: {
         color: Colors.textPrimary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.semiBold,
     },
     headerStatus: {
         color: Colors.online,
         fontSize: FontSizes.sm,
+        fontFamily: FontFamily.small,
     },
     headerBlocked: {
         color: Colors.error,
@@ -260,6 +264,7 @@ const styles = StyleSheet.create({
     moreBtn: {
         color: Colors.textSecondary,
         fontSize: FontSizes.xl,
+        fontFamily: FontFamily.heading,
         paddingHorizontal: Spacing.sm,
     },
     messageList: {
@@ -278,10 +283,12 @@ const styles = StyleSheet.create({
     },
     blockedIcon: {
         fontSize: 18,
+        fontFamily: FontFamily.body,
     },
     blockedText: {
         color: Colors.error,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.medium,
         flex: 1,
     },
@@ -294,6 +301,7 @@ const styles = StyleSheet.create({
     unblockBannerText: {
         color: Colors.white,
         fontSize: FontSizes.sm,
+        fontFamily: FontFamily.small,
         fontWeight: FontWeights.semiBold,
     },
     inputBar: {
@@ -311,6 +319,7 @@ const styles = StyleSheet.create({
     },
     attachIcon: {
         fontSize: 22,
+        fontFamily: FontFamily.body,
     },
     input: {
         flex: 1,
@@ -320,6 +329,7 @@ const styles = StyleSheet.create({
         paddingVertical: Spacing.sm + 2,
         color: Colors.textPrimary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         maxHeight: 100,
     },
     mediaBtn: {
@@ -327,6 +337,7 @@ const styles = StyleSheet.create({
     },
     mediaIcon: {
         fontSize: 22,
+        fontFamily: FontFamily.body,
     },
     sendBtn: {
         width: 40,
@@ -341,6 +352,7 @@ const styles = StyleSheet.create({
     },
     sendIcon: {
         fontSize: 18,
+        fontFamily: FontFamily.body,
         color: Colors.white,
     },
     // Menu modal
@@ -368,12 +380,14 @@ const styles = StyleSheet.create({
     },
     menuIcon: {
         fontSize: 18,
+        fontFamily: FontFamily.body,
         width: 24,
         textAlign: 'center',
     },
     menuText: {
         color: Colors.textPrimary,
         fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
         fontWeight: FontWeights.medium,
     },
     menuDanger: {
