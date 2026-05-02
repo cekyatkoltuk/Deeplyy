@@ -19,7 +19,7 @@ export const PremiumLockOverlay: React.FC<PremiumLockOverlayProps> = ({
             onPress={onPress}
         >
             <View style={styles.content}>
-                <Text style={styles.lockIcon}>🔒</Text>
+                <Text style={styles.lockIcon}>Locked</Text>
                 <Text style={styles.message}>{message}</Text>
                 <Text style={styles.subtext}>Tap to unlock</Text>
             </View>

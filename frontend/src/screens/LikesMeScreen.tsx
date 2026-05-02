@@ -49,7 +49,7 @@ export const LikesMeScreen = () => {
                     {item.name}, {item.age}
                 </Text>
                 <View style={styles.locationRow}>
-                    <Text style={styles.location}>📍 {item.location}</Text>
+                    <Text style={styles.location}> {item.location}</Text>
                     <Text style={styles.distance}>{item.distance} km</Text>
                 </View>
                 <View style={styles.interests}>
@@ -60,10 +60,10 @@ export const LikesMeScreen = () => {
             </View>
             <View style={styles.actions}>
                 <TouchableOpacity style={[styles.actionBtn, styles.passAction]}>
-                    <Text style={styles.actionText}>✕</Text>
+                    <Text style={styles.actionText}></Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.actionBtn, styles.likeAction]}>
-                    <Text style={styles.actionText}>♥</Text>
+                    <Text style={styles.actionText}></Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -80,7 +80,7 @@ export const LikesMeScreen = () => {
             </View>
 
             <Text style={styles.subtitle}>
-                These people already liked your profile 💕
+                These people already liked your profile 
             </Text>
 
             <FlatList
@@ -93,7 +93,7 @@ export const LikesMeScreen = () => {
                 showsVerticalScrollIndicator={false}
                 ListEmptyComponent={() => (
                     <View style={styles.emptyState}>
-                        <Text style={styles.emptyIcon}>💕</Text>
+                        <Text style={styles.emptyIcon}></Text>
                         <Text style={styles.emptyTitle}>No likes yet</Text>
                         <Text style={styles.emptySubtitle}>Keep swiping to get noticed!</Text>
                     </View>

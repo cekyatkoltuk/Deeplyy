@@ -139,20 +139,20 @@ export const DiscoveryScreen = ({ navigation }: any) => {
 
     return (
         <View style={styles.container}>
-            <AppHeader />
+            <AppHeader onFilterPress={() => navigation.navigate('DiscoveryFilters')} />
 
             {/* Card Stack */}
             <View style={styles.cardStack}>
                 {!currentCard ? (
                     <View style={styles.emptyState}>
-                        <Text style={styles.emptyIcon}>🔍</Text>
+                        <Text style={styles.emptyIcon}></Text>
                         <Text style={styles.emptyTitle}>No more profiles</Text>
                         <Text style={styles.emptySubtitle}>
                             Check back later or adjust your filters
                         </Text>
                         <TouchableOpacity onPress={handleReset} style={styles.resetBtn}>
                             <Text style={styles.resetText}>
-                                🔄 Reset {!isPremium && '🔒'}
+                                 Reset {!isPremium && ''}
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -215,30 +215,30 @@ export const DiscoveryScreen = ({ navigation }: any) => {
                         style={[styles.actionBtn, styles.passBtn]}
                         onPress={handlePass}
                     >
-                        <Text style={styles.actionIcon}>✕</Text>
+                        <Text style={styles.actionIcon}></Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         style={[styles.actionBtn, styles.rewindBtn]}
                         onPress={handleRewind}
                     >
-                        <Text style={styles.actionIcon}>↩️</Text>
-                        {!isPremium && <Text style={styles.actionLock}>🔒</Text>}
+                        <Text style={styles.actionIcon}>↩</Text>
+                        {!isPremium && <Text style={styles.actionLock}></Text>}
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         style={[styles.actionBtn, styles.likeBtn]}
                         onPress={handleLike}
                     >
-                        <Text style={styles.actionIcon}>♥</Text>
+                        <Text style={styles.actionIcon}></Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         style={[styles.actionBtn, styles.resetActionBtn]}
                         onPress={handleReset}
                     >
-                        <Text style={styles.actionIcon}>🔄</Text>
-                        {!isPremium && <Text style={styles.actionLock}>🔒</Text>}
+                        <Text style={styles.actionIcon}></Text>
+                        {!isPremium && <Text style={styles.actionLock}></Text>}
                     </TouchableOpacity>
                 </View>
             )}
@@ -250,7 +250,7 @@ export const DiscoveryScreen = ({ navigation }: any) => {
                         colors={['rgba(255,107,107,0.9)', 'rgba(168,85,247,0.9)']}
                         style={styles.matchModalContent}
                     >
-                        <Text style={styles.matchEmoji}>🎉</Text>
+                        <Text style={styles.matchEmoji}></Text>
                         <Text style={styles.matchTitle}>It's a Match!</Text>
                         <Text style={styles.matchSubtitle}>
                             You and {matchedUser?.name} liked each other

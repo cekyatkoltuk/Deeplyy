@@ -64,7 +64,7 @@ export const Avatar: React.FC<AvatarProps> = ({
             )}
             {isPremium && (
                 <View style={[styles.premiumBadge, { bottom: -2, right: -2 }]}>
-                    <Text style={styles.premiumIcon}>💎</Text>
+                    <Text style={styles.premiumIcon}>P</Text>
                 </View>
             )}
         </View>

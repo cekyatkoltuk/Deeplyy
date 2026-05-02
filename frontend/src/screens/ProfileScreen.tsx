@@ -102,17 +102,17 @@ export const ProfileScreen = ({ navigation }: any) => {
                             name={profile.name}
                         />
                         <TouchableOpacity style={styles.editAvatarBtn} onPress={() => setShowPhotoInput(true)}>
-                            <Text style={styles.editAvatarIcon}>📷</Text>
+                            <Text style={styles.editAvatarIcon}></Text>
                         </TouchableOpacity>
                     </View>
                     <Text style={styles.profileName}>
                         {profile.name}, {profile.age}
-                        {isPremium && ' 💎'}
+                        {isPremium && ' '}
                     </Text>
-                    <Text style={styles.profileLocation}>📍 {profile.location || 'No location set'}</Text>
+                    <Text style={styles.profileLocation}> {profile.location || 'No location set'}</Text>
                     {isPremium && (
                         <View style={styles.premiumTag}>
-                            <Text style={styles.premiumTagText}>✨ Premium Member</Text>
+                            <Text style={styles.premiumTagText}> Premium Member</Text>
                         </View>
                     )}
                 </View>
@@ -129,7 +129,7 @@ export const ProfileScreen = ({ navigation }: any) => {
                             end={{ x: 1, y: 0 }}
                             style={styles.premiumCtaGradient}
                         >
-                            <Text style={styles.premiumCtaIcon}>👑</Text>
+                            <Text style={styles.premiumCtaIcon}></Text>
                             <View style={styles.premiumCtaText}>
                                 <Text style={styles.premiumCtaTitle}>Upgrade to Premium</Text>
                                 <Text style={styles.premiumCtaSubtitle}>
@@ -174,7 +174,7 @@ export const ProfileScreen = ({ navigation }: any) => {
                         </View>
                     ) : (
                         <Text style={styles.bioText}>
-                            {profile.bio || 'Tap "Edit" to add your bio ✍️'}
+                            {profile.bio || 'Tap "Edit" to add your bio '}
                         </Text>
                     )}
                 </View>
@@ -212,7 +212,7 @@ export const ProfileScreen = ({ navigation }: any) => {
                                     onPress={() => handleRemovePhoto(idx)}
                                     hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                                 >
-                                    <Text style={styles.removePhotoText}>✕</Text>
+                                    <Text style={styles.removePhotoText}></Text>
                                 </TouchableOpacity>
                             </View>
                         ))}
@@ -259,14 +259,14 @@ export const ProfileScreen = ({ navigation }: any) => {
                         style={styles.settingRow}
                         onPress={() => navigation.navigate('Settings')}
                     >
-                        <Text style={styles.settingIcon}>⚙️</Text>
+                        <Text style={styles.settingIcon}></Text>
                         <Text style={styles.settingText}>App Settings</Text>
                         <Text style={styles.settingArrow}>›</Text>
                     </TouchableOpacity>
 
                     {/* Dev Toggle for Premium */}
                     <View style={styles.settingRow}>
-                        <Text style={styles.settingIcon}>💎</Text>
+                        <Text style={styles.settingIcon}></Text>
                         <Text style={styles.settingText}>Premium (Dev Toggle)</Text>
                         <Switch
                             value={isPremium}
@@ -277,13 +277,13 @@ export const ProfileScreen = ({ navigation }: any) => {
                     </View>
 
                     <TouchableOpacity style={styles.settingRow}>
-                        <Text style={styles.settingIcon}>🔔</Text>
+                        <Text style={styles.settingIcon}></Text>
                         <Text style={styles.settingText}>Notifications</Text>
                         <Text style={styles.settingArrow}>›</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.settingRow}>
-                        <Text style={styles.settingIcon}>🛡️</Text>
+                        <Text style={styles.settingIcon}></Text>
                         <Text style={styles.settingText}>Privacy & Safety</Text>
                         <Text style={styles.settingArrow}>›</Text>
                     </TouchableOpacity>
@@ -294,7 +294,7 @@ export const ProfileScreen = ({ navigation }: any) => {
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>Subscription</Text>
                         <View style={styles.subscriptionCard}>
-                            <Text style={styles.subscriptionPlan}>💎 Premium Monthly</Text>
+                            <Text style={styles.subscriptionPlan}> Premium Monthly</Text>
                             <Text style={styles.subscriptionDate}>
                                 Renews: March 28, 2026
                             </Text>

@@ -16,7 +16,7 @@ export const pool = new Pool({
 });
 
 pool.on('error', (err) => {
-    console.error('❌ Unexpected database error:', err);
+    console.error(' Unexpected database error:', err);
 });
 
 export const query = (text: string, params?: any[]) => pool.query(text, params);

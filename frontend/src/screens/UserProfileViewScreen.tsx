@@ -67,10 +67,10 @@ export const UserProfileViewScreen = ({ route, navigation }: any) => {
                     <View style={styles.infoSection}>
                         <Text style={styles.name}>
                             {user.name}{user.age ? `, ${user.age}` : ''}
-                            {user.isPremium && ' 💎'}
+                            {user.isPremium && ' '}
                         </Text>
                         {user.location ? (
-                            <Text style={styles.location}>📍 {user.location}</Text>
+                            <Text style={styles.location}> {user.location}</Text>
                         ) : null}
                     </View>
 

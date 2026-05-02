@@ -28,10 +28,10 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ user, isFirst = false }) =
                     <View style={styles.nameRow}>
                         <Text style={styles.name}>{user.name}</Text>
                         <Text style={styles.age}>{user.age}</Text>
-                        {user.isPremium && <Text style={styles.premiumBadge}>💎</Text>}
+                        {user.isPremium && <Text style={styles.premiumBadge}>Premium</Text>}
                     </View>
                     <View style={styles.locationRow}>
-                        <Text style={styles.locationIcon}>📍</Text>
+                        <Text style={styles.locationIcon}>Location:</Text>
                         <Text style={styles.location}>
                             {user.location} · {user.distance} km away
                         </Text>

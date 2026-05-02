@@ -20,7 +20,7 @@ export const setupChatSocket = (io: Server) => {
 
     io.on('connection', (socket: Socket) => {
         const userId = (socket as any).userId;
-        console.log(`🟢 User connected: ${userId}`);
+        console.log(` User connected: ${userId}`);
 
         // Set user online
         query('UPDATE users SET is_online = TRUE, last_seen = NOW() WHERE id = $1', [userId]);
@@ -40,7 +40,7 @@ export const setupChatSocket = (io: Server) => {
 
             if (result.rows.length > 0) {
                 socket.join(`match:${matchId}`);
-                console.log(`📭 User ${userId} joined room match:${matchId}`);
+                console.log(` User ${userId} joined room match:${matchId}`);
             }
         });
 
@@ -119,7 +119,7 @@ export const setupChatSocket = (io: Server) => {
 
         // Disconnect
         socket.on('disconnect', () => {
-            console.log(`🔴 User disconnected: ${userId}`);
+            console.log(` User disconnected: ${userId}`);
             query('UPDATE users SET is_online = FALSE, last_seen = NOW() WHERE id = $1', [userId]);
         });
     });

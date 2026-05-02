@@ -1,9 +1,11 @@
 import { Router, Response } from 'express';
+import { Server } from 'socket.io';
 import { query } from '../config/database';
 import { authMiddleware, AuthRequest } from '../middleware/auth';
 import { premiumMiddleware } from '../middleware/premium';
 
-const router = Router();
+export default function swipeRoutes(io: Server) {
+    const router = Router();
 
 // GET /api/swipes/cards — get profiles to swipe on
 router.get('/cards', authMiddleware, async (req: AuthRequest, res: Response): Promise<void> => {
@@ -56,6 +58,24 @@ router.post('/like', authMiddleware, async (req: AuthRequest, res: Response): Pr
        ON CONFLICT (swiper_id, swiped_id) DO UPDATE SET direction = 'like', created_at = NOW()`,
             [req.userId, targetUserId]
         );
+
+        // Notify the target user that they received a like
+        const likerResult = await query(
+            'SELECT id, name, age, photos, is_online FROM users WHERE id = $1',
+            [req.userId]
+        );
+        if (likerResult.rows.length > 0) {
+            const liker = likerResult.rows[0];
+            io.to(`user:${targetUserId}`).emit('new_like', {
+                from: {
+                    id: liker.id,
+                    name: liker.name,
+                    age: liker.age,
+                    photos: liker.photos,
+                    isOnline: liker.is_online,
+                },
+            });
+        }
 
         // Check if they also liked us → MATCH!
         const mutualLike = await query(
@@ -174,4 +194,5 @@ router.post('/reset', authMiddleware, premiumMiddleware, async (req: AuthRequest
     }
 });
 
-export default router;
+    return router;
+}

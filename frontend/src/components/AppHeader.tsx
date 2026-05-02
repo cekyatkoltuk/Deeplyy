@@ -1,22 +1,43 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { useNavigation, NavigationProp, useRoute } from '@react-navigation/native';
 import { usePremiumStore } from '../store/premiumStore';
 import { Colors, FontSizes, FontWeights, Spacing, FontFamily } from '../utils/theme';
+import { Ionicons } from '@expo/vector-icons';
 
-export const AppHeader = () => {
+interface AppHeaderProps {
+    onFilterPress?: () => void;
+}
+
+export const AppHeader = ({ onFilterPress }: AppHeaderProps = {}) => {
     const navigation = useNavigation<NavigationProp<any>>();
     const { isPremium } = usePremiumStore();
 
+    const handleFilterPress = () => {
+        if (onFilterPress) {
+            onFilterPress();
+            return;
+        }
+        // Navigate cross-tab (for screens outside the Discovery stack)
+        navigation.navigate('DiscoveryTab', { screen: 'DiscoveryFilters' });
+    };
+
     return (
         <View style={styles.container}>
-            <Text style={styles.logo}>🔥 Flame</Text>
+            <Text style={styles.logo}>Flame</Text>
             <TouchableOpacity
                 style={styles.filterBtn}
-                onPress={() => navigation.navigate('DiscoveryTab', { screen: 'DiscoveryFilters' })}
+                onPress={handleFilterPress}
             >
-                <Text style={styles.filterIcon}>⚙️</Text>
-                {!isPremium && <Text style={styles.lockBadge}>🔒</Text>}
+                <Ionicons name="settings-outline" size={22} color={Colors.textSecondary} />
+                {!isPremium && (
+                    <Ionicons
+                        name="lock-closed"
+                        size={10}
+                        color={Colors.textMuted}
+                        style={styles.lockBadge}
+                    />
+                )}
             </TouchableOpacity>
         </View>
     );
@@ -30,7 +51,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: Spacing.lg,
         height: 65,
         paddingTop: 10,
-        backgroundColor: Colors.surface, // Dark black background like nav bar
+        backgroundColor: Colors.surface,
         borderBottomWidth: 1,
         borderBottomColor: Colors.border,
     },
@@ -45,13 +66,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 2,
     },
-    filterIcon: {
-        fontSize: 24,
-        fontFamily: FontFamily.heading,
-    },
     lockBadge: {
-        fontSize: 12,
-        fontFamily: FontFamily.small,
         marginLeft: -4,
         marginTop: -8,
     },

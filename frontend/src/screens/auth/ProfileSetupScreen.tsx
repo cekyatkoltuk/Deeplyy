@@ -54,7 +54,7 @@ export const ProfileSetupScreen = ({ navigation }: any) => {
             <View style={styles.photoGrid}>
                 {[0, 1, 2, 3, 4, 5].map((idx) => (
                     <TouchableOpacity key={idx} style={styles.photoSlot}>
-                        <Text style={styles.addPhotoIcon}>{idx === 0 ? '📸' : '+'}</Text>
+                        <Text style={styles.addPhotoIcon}>{idx === 0 ? 'Add' : '+'}</Text>
                         {idx === 0 && <Text style={styles.mainLabel}>Main</Text>}
                     </TouchableOpacity>
                 ))}
@@ -83,7 +83,7 @@ export const ProfileSetupScreen = ({ navigation }: any) => {
                         onPress={() => setGender(g)}
                     >
                         <Text style={styles.genderIcon}>
-                            {g === 'male' ? '👨' : g === 'female' ? '👩' : '🧑'}
+                            {g === 'male' ? 'M' : g === 'female' ? 'F' : 'O'}
                         </Text>
                         <Text style={[styles.genderText, gender === g && styles.genderSelectedText]}>
                             {g.charAt(0).toUpperCase() + g.slice(1)}
@@ -145,7 +145,7 @@ export const ProfileSetupScreen = ({ navigation }: any) => {
                         />
                     )}
                     <Button
-                        title={step === 2 ? "Let's Go! 🚀" : 'Next'}
+                        title={step === 2 ? "Let's Go!" : 'Next'}
                         onPress={step === 2 ? handleComplete : () => setStep(step + 1)}
                         variant="primary"
                         size="large"

@@ -94,7 +94,7 @@ export const BlockedUsersScreen = ({ navigation }: any) => {
                     contentContainerStyle={blockedUsers.length === 0 ? styles.emptyContainer : styles.list}
                     ListEmptyComponent={() => (
                         <View style={styles.emptyState}>
-                            <Text style={styles.emptyIcon}>✅</Text>
+                            <Text style={styles.emptyIcon}></Text>
                             <Text style={styles.emptyTitle}>No blocked users</Text>
                             <Text style={styles.emptySubtitle}>
                                 You haven't blocked anyone yet

@@ -46,7 +46,7 @@ export const ChatListScreen = ({ navigation }: any) => {
                 contentContainerStyle={conversations.length === 0 ? styles.empty : undefined}
                 ListEmptyComponent={() => (
                     <View style={styles.emptyState}>
-                        <Text style={styles.emptyIcon}>💬</Text>
+                        <Text style={styles.emptyIcon}></Text>
                         <Text style={styles.emptyTitle}>No messages yet</Text>
                         <Text style={styles.emptySubtitle}>
                             Match with someone to start chatting!

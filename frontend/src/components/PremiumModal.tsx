@@ -40,7 +40,7 @@ export const PremiumModal: React.FC<PremiumModalProps> = ({
                             >
                                 {/* Header */}
                                 <View style={styles.header}>
-                                    <Text style={styles.crown}>👑</Text>
+                                    <Text style={styles.crown}>Premium</Text>
                                     <Text style={styles.title}>Unlock Premium</Text>
                                     <Text style={styles.subtitle}>
                                         You must be a premium user to access this feature.

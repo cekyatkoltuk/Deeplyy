@@ -51,7 +51,7 @@ export const DiscoveryFiltersScreen = ({ navigation }: any) => {
                 {/* Premium Lock */}
                 {!isPremium && (
                     <View style={styles.premiumBanner}>
-                        <Text style={styles.premiumBannerIcon}>👑</Text>
+                        <Text style={styles.premiumBannerIcon}></Text>
                         <View style={styles.premiumBannerText}>
                             <Text style={styles.premiumBannerTitle}>Premium Feature</Text>
                             <Text style={styles.premiumBannerSubtitle}>
@@ -128,7 +128,7 @@ export const DiscoveryFiltersScreen = ({ navigation }: any) => {
                     <View style={styles.filterSection}>
                         <Text style={styles.filterLabel}>Location</Text>
                         <TouchableOpacity style={styles.locationBtn}>
-                            <Text style={styles.locationIcon}>📍</Text>
+                            <Text style={styles.locationIcon}></Text>
                             <Text style={styles.locationText}>{location}</Text>
                             <Text style={styles.locationArrow}>›</Text>
                         </TouchableOpacity>

@@ -44,7 +44,7 @@ export const LoginScreen = ({ navigation }: any) => {
                 >
                     {/* Logo */}
                     <View style={styles.logoContainer}>
-                        <Text style={styles.logoIcon}>🔥</Text>
+                        <Text style={styles.logoIcon}>Flame</Text>
                         <Text style={styles.logoText}>Flame</Text>
                         <Text style={styles.tagline}>Find your perfect match</Text>
                     </View>
@@ -58,7 +58,7 @@ export const LoginScreen = ({ navigation }: any) => {
                             onChangeText={setEmail}
                             keyboardType="email-address"
                             autoCapitalize="none"
-                            icon={<Text style={styles.inputIcon}>✉️</Text>}
+                            icon={<Text style={styles.inputIcon}></Text>}
                         />
                         <Input
                             label="Password"
@@ -66,7 +66,7 @@ export const LoginScreen = ({ navigation }: any) => {
                             value={password}
                             onChangeText={setPassword}
                             secureTextEntry
-                            icon={<Text style={styles.inputIcon}>🔒</Text>}
+                            icon={<Text style={styles.inputIcon}></Text>}
                         />
 
                         <TouchableOpacity style={styles.forgotBtn}>
@@ -96,7 +96,7 @@ export const LoginScreen = ({ navigation }: any) => {
                             variant="secondary"
                             size="large"
                             fullWidth
-                            icon={<Text style={styles.socialIcon}>🔵</Text>}
+                            icon={<Text style={styles.socialIcon}>G</Text>}
                         />
 
                         <Button
@@ -105,7 +105,7 @@ export const LoginScreen = ({ navigation }: any) => {
                             variant="secondary"
                             size="large"
                             fullWidth
-                            icon={<Text style={styles.socialIcon}>🍎</Text>}
+                            icon={<Text style={styles.socialIcon}>A</Text>}
                         />
                     </View>
 

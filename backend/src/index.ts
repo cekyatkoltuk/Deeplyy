@@ -42,7 +42,7 @@ app.use(express.urlencoded({ extended: true }));
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/swipes', swipeRoutes);
+app.use('/api/swipes', swipeRoutes(io));
 app.use('/api/matches', matchRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
@@ -71,10 +71,10 @@ const initDatabase = async () => {
 
         try {
             await tempPool.query(`CREATE DATABASE flame_dating`);
-            console.log('📦 Database "flame_dating" created');
+            console.log(' Database "flame_dating" created');
         } catch (err: any) {
             if (err.code === '42P04') {
-                console.log('📦 Database "flame_dating" already exists');
+                console.log(' Database "flame_dating" already exists');
             } else {
                 throw err;
             }
@@ -85,23 +85,23 @@ const initDatabase = async () => {
         const schemaPath = path.resolve(__dirname, '../sql/schema.sql');
         const schema = fs.readFileSync(schemaPath, 'utf-8');
         await query(schema);
-        console.log('✅ Database schema applied');
+        console.log(' Database schema applied');
 
         // Run seed
         const seedPath = path.resolve(__dirname, '../sql/seed.sql');
         const seed = fs.readFileSync(seedPath, 'utf-8');
         await query(seed);
-        console.log('🌱 Seed data loaded');
+        console.log(' Seed data loaded');
 
     } catch (error) {
-        console.error('❌ Database initialization error:', error);
+        console.error(' Database initialization error:', error);
         process.exit(1);
     }
 };
 
 initDatabase().then(() => {
     httpServer.listen(PORT, () => {
-        console.log(`\n🔥 Flame Dating API Server`);
+        console.log(`\n Flame Dating API Server`);
         console.log(`   ├── REST:   http://localhost:${PORT}/api`);
         console.log(`   ├── Socket: http://localhost:${PORT}`);
         console.log(`   └── Health: http://localhost:${PORT}/api/health\n`);

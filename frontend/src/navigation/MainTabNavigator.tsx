@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Text, View, StyleSheet, Image } from 'react-native';
@@ -6,7 +6,7 @@ import { Colors, FontSizes, FontWeights, Spacing, FontFamily } from '../utils/th
 import { Ionicons } from '@expo/vector-icons';
 import { DiscoveryScreen } from '../screens/DiscoveryScreen';
 import { DiscoveryFiltersScreen } from '../screens/DiscoveryFiltersScreen';
-import { MatchesScreen } from '../screens/MatchesScreen';
+
 import { ChatListScreen } from '../screens/ChatListScreen';
 import { ChatRoomScreen } from '../screens/ChatRoomScreen';
 import { LikesMeScreen } from '../screens/LikesMeScreen';
@@ -15,6 +15,8 @@ import { SettingsScreen } from '../screens/SettingsScreen';
 import { UserProfileViewScreen } from '../screens/UserProfileViewScreen';
 import { BlockedUsersScreen } from '../screens/BlockedUsersScreen';
 import { usePremiumStore } from '../store/premiumStore';
+import { useNotificationStore } from '../store/notificationStore';
+import { socketService } from '../services/socket';
 
 const Tab = createBottomTabNavigator();
 const DiscoveryStack = createNativeStackNavigator();
@@ -65,10 +67,6 @@ const ProfileNavigator = () => (
 );
 
 const CUSTOM_ICONS = {
-    matches: {
-        active: require('../../assets/icons/matches-active.png'),
-        inactive: require('../../assets/icons/matches-inactive.png'),
-    },
     chat: {
         active: require('../../assets/icons/chat-active.png'),
         inactive: require('../../assets/icons/chat-inactive.png'),
@@ -82,8 +80,8 @@ const CUSTOM_ICONS = {
         inactive: require('../../assets/icons/profile-inactive.png'),
     },
     discover: {
-        active: require('../../assets/icons/discover-active.png'),
-        inactive: require('../../assets/icons/discover-inactive.png'),
+        active: require('../../assets/icons/matches-active.png'),
+        inactive: require('../../assets/icons/matches-inactive.png'),
     },
 };
 
@@ -165,6 +163,18 @@ const tabIconStyles = StyleSheet.create({
 });
 
 export const MainTabNavigator = () => {
+    const { unreadLikes, unreadMessages, loadUnreadCounts, clearLikes, clearMessages } = useNotificationStore();
+
+    useEffect(() => {
+        // Connect socket and load initial counts
+        socketService.connect();
+        loadUnreadCounts();
+
+        return () => {
+            socketService.disconnect();
+        };
+    }, []);
+
     return (
         <Tab.Navigator
             screenOptions={{
@@ -181,33 +191,6 @@ export const MainTabNavigator = () => {
             }}
         >
             <Tab.Screen
-                name="MatchesTab"
-                component={MatchesScreen}
-                options={{
-                    tabBarIcon: ({ focused }) => (
-                        <TabIcon name="matches" label="Matches" focused={focused} badge={2} />
-                    ),
-                }}
-            />
-            <Tab.Screen
-                name="ChatTab"
-                component={ChatNavigator}
-                options={{
-                    tabBarIcon: ({ focused }) => (
-                        <TabIcon name="chat" label="Chat" focused={focused} badge={3} />
-                    ),
-                }}
-            />
-            <Tab.Screen
-                name="LikesMeTab"
-                component={LikesMeScreen}
-                options={{
-                    tabBarIcon: ({ focused }) => (
-                        <TabIcon name="likes" label="Likes" focused={focused} badge={5} />
-                    ),
-                }}
-            />
-            <Tab.Screen
                 name="ProfileTab"
                 component={ProfileNavigator}
                 options={{
@@ -222,6 +205,30 @@ export const MainTabNavigator = () => {
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <TabIcon name="discover" label="Discover" focused={focused} />
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="LikesMeTab"
+                component={LikesMeScreen}
+                listeners={{
+                    tabPress: () => clearLikes(),
+                }}
+                options={{
+                    tabBarIcon: ({ focused }) => (
+                        <TabIcon name="likes" label="Likes" focused={focused} badge={unreadLikes} />
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="ChatTab"
+                component={ChatNavigator}
+                listeners={{
+                    tabPress: () => clearMessages(),
+                }}
+                options={{
+                    tabBarIcon: ({ focused }) => (
+                        <TabIcon name="chat" label="Chat" focused={focused} badge={unreadMessages} />
                     ),
                 }}
             />
