@@ -1,4 +1,4 @@
--- Flame Dating App Database Schema
+-- Deeplyy Dating App Database Schema
 
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -17,6 +17,10 @@ CREATE TABLE IF NOT EXISTS users (
     longitude DOUBLE PRECISION DEFAULT 0,
     photos TEXT[] DEFAULT '{}',
     interests TEXT[] DEFAULT '{}',
+    mbti VARCHAR(4),
+    enneagram VARCHAR(10),
+    phone_number VARCHAR(20) UNIQUE,
+    looking_for VARCHAR(20),
     is_premium BOOLEAN DEFAULT FALSE,
     premium_expires_at TIMESTAMP,
     is_online BOOLEAN DEFAULT FALSE,

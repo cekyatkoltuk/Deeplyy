@@ -29,16 +29,16 @@ PostgreSQL üzerinde veritabanını oluştur ve şemayı yükle:
 psql -U postgres
 
 # Veritabanını oluştur
-CREATE DATABASE flame_dating;
+CREATE DATABASE deeplyy_dating;
 
 # Bağlantıyı kapat
 \q
 
 # Şemayı yükle
-psql -U postgres -d flame_dating -f backend/sql/schema.sql
+psql -U postgres -d deeplyy_dating -f backend/sql/schema.sql
 
 # (Opsiyonel) Örnek verileri yükle
-psql -U postgres -d flame_dating -f backend/sql/seed.sql
+psql -U postgres -d deeplyy_dating -f backend/sql/seed.sql
 ```
 
 ---
@@ -60,7 +60,7 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=<şifreniz>
-DB_NAME=flame_dating
+DB_NAME=deeplyy_dating
 JWT_SECRET=<güçlü-bir-secret>
 JWT_REFRESH_SECRET=<güçlü-bir-refresh-secret>
 JWT_EXPIRES_IN=7d

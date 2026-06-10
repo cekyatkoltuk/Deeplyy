@@ -138,8 +138,8 @@ export const RegisterScreen = ({ navigation }: any) => {
             age = currentYear - y;
         }
         try {
-            await register(name, email, password, age, 'other');
-            navigation.navigate('ProfileSetup');
+            await register(name, email, password, age, 'other', '');
+            navigation.navigate('Onboarding');
         } catch (error: any) {
             alert(error.message || 'Registration failed');
         }
@@ -165,7 +165,7 @@ export const RegisterScreen = ({ navigation }: any) => {
                         </TouchableOpacity>
                         <Text style={styles.title}>Create Account</Text>
                         <Text style={styles.subtitle}>
-                            Join Flame and find your perfect match
+                            Join Deeplyy and find your perfect match
                         </Text>
                     </View>
 

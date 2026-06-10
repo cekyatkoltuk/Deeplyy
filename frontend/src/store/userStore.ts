@@ -11,6 +11,9 @@ interface UserProfile {
     location: string;
     photos: string[];
     interests: string[];
+    mbti?: string;
+    enneagram?: string;
+    lookingFor?: string;
     isPremium: boolean;
     isOnline: boolean;
     distance: number;
@@ -36,6 +39,9 @@ const defaultProfile: UserProfile = {
     location: '',
     photos: [],
     interests: [],
+    mbti: undefined,
+    enneagram: undefined,
+    lookingFor: undefined,
     isPremium: false,
     isOnline: true,
     distance: 0,
@@ -50,9 +56,18 @@ export const useUserStore = create<UserState>((set, get) => ({
         try {
             const res = await api.get('/users/profile');
             set({ profile: res.data, isLoading: false });
-        } catch (error) {
+        } catch (error: any) {
             set({ isLoading: false });
             console.error('Failed to load profile:', error);
+            // If user doesn't exist in DB anymore (404), clear auth state
+            if (error.response?.status === 404) {
+                const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
+                await AsyncStorage.multiRemove(['token', 'refreshToken', 'userId']);
+                // Force page reload to redirect to login
+                if (typeof window !== 'undefined') {
+                    window.location.reload();
+                }
+            }
         }
     },
 
@@ -61,9 +76,10 @@ export const useUserStore = create<UserState>((set, get) => ({
         try {
             const res = await api.put('/users/profile', updates);
             set({ profile: res.data, isLoading: false });
-        } catch (error) {
+        } catch (error: any) {
             set({ isLoading: false });
             console.error('Failed to update profile:', error);
+            throw error; // Re-throw so the caller knows it failed
         }
     },
 
@@ -93,13 +109,20 @@ export const useUserStore = create<UserState>((set, get) => ({
     },
 
     setInterests: async (interests: string[]) => {
+        // Optimistic update for instant UI feedback
+        set((state) => ({
+            profile: { ...state.profile, interests },
+        }));
+        
         try {
             const res = await api.put('/users/profile', { interests });
+            // Ensure state matches server exactly (in case server formatted it)
             set((state) => ({
                 profile: { ...state.profile, interests: res.data.interests },
             }));
         } catch (error) {
             console.error('Failed to set interests:', error);
+            // Optionally could revert state here
         }
     },
 }));

@@ -7,26 +7,44 @@ const router = Router();
 // POST /api/auth/register
 router.post('/register', async (req: Request, res: Response): Promise<void> => {
     try {
-        const { email, password, name, age, gender } = req.body;
+        const { 
+            email, password, name, age, gender, phone_number,
+            bio, location, photos, interests, mbti, enneagram, lookingFor
+        } = req.body;
 
-        if (!email || !password || !name || !age || !gender) {
-            res.status(400).json({ error: 'All fields are required: email, password, name, age, gender' });
+        if (!email || !password || !name || !age || !gender || !phone_number) {
+            res.status(400).json({ error: 'All fields are required: email, password, name, age, gender, phone_number' });
             return;
         }
 
-        // Check if user exists
-        const existing = await query('SELECT id FROM users WHERE email = $1', [email.toLowerCase()]);
-        if (existing.rows.length > 0) {
+        // Check if user exists by email
+        const existingEmail = await query('SELECT id FROM users WHERE email = $1', [email.toLowerCase()]);
+        if (existingEmail.rows.length > 0) {
             res.status(409).json({ error: 'Email already registered' });
+            return;
+        }
+
+        // Check if user exists by phone_number
+        const existingPhone = await query('SELECT id FROM users WHERE phone_number = $1', [phone_number]);
+        if (existingPhone.rows.length > 0) {
+            res.status(409).json({ error: 'Phone number already registered' });
             return;
         }
 
         // Hash password and create user
         const passwordHash = await hashPassword(password);
         const result = await query(
-            `INSERT INTO users (email, password_hash, name, age, gender)
-       VALUES ($1, $2, $3, $4, $5) RETURNING id, email, name, age, bio, gender, location, photos, interests, is_premium, is_online`,
-            [email.toLowerCase(), passwordHash, name, age, gender]
+            `INSERT INTO users (
+                email, password_hash, name, age, gender, phone_number,
+                bio, location, photos, interests, mbti, enneagram, looking_for
+            )
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) 
+            RETURNING id, email, name, age, bio, gender, location, photos, interests, mbti, enneagram, looking_for, phone_number, is_premium, is_online`,
+            [
+                email.toLowerCase(), passwordHash, name, age, gender, phone_number,
+                bio || '', location || '', photos || [], 
+                interests || [], mbti || null, enneagram || null, lookingFor || null
+            ]
         );
 
         const user = result.rows[0];
@@ -55,6 +73,34 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
         });
     } catch (error) {
         console.error('Register error:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// POST /api/auth/check
+router.post('/check', async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { email, phone_number } = req.body;
+
+        if (email) {
+            const result = await query('SELECT id FROM users WHERE email = $1', [email.toLowerCase()]);
+            if (result.rows.length > 0) {
+                res.json({ exists: true, message: 'Email already registered' });
+                return;
+            }
+        }
+
+        if (phone_number) {
+            const result = await query('SELECT id FROM users WHERE phone_number = $1', [phone_number]);
+            if (result.rows.length > 0) {
+                res.json({ exists: true, message: 'Phone number already registered' });
+                return;
+            }
+        }
+
+        res.json({ exists: false });
+    } catch (error) {
+        console.error('Check error:', error);
         res.status(500).json({ error: 'Server error' });
     }
 });

@@ -9,7 +9,7 @@ router.get('/profile', authMiddleware, async (req: AuthRequest, res: Response): 
     try {
         const result = await query(
             `SELECT id, email, name, age, bio, gender, location, photos, interests,
-              is_premium, is_online, created_at
+              mbti, enneagram, looking_for, is_premium, is_online, created_at
        FROM users WHERE id = $1`,
             [req.userId]
         );
@@ -30,6 +30,9 @@ router.get('/profile', authMiddleware, async (req: AuthRequest, res: Response): 
             location: user.location,
             photos: user.photos,
             interests: user.interests,
+            mbti: user.mbti,
+            enneagram: user.enneagram,
+            lookingFor: user.looking_for,
             isPremium: user.is_premium,
             isOnline: user.is_online,
             distance: 0,
@@ -47,7 +50,7 @@ router.get('/profile/:userId', authMiddleware, async (req: AuthRequest, res: Res
         const targetId = req.params.userId as string;
         const result = await query(
             `SELECT id, name, age, bio, gender, location, photos, interests,
-              is_premium, is_online
+              mbti, enneagram, looking_for, is_premium, is_online
        FROM users WHERE id = $1`,
             [targetId]
         );
@@ -67,6 +70,9 @@ router.get('/profile/:userId', authMiddleware, async (req: AuthRequest, res: Res
             location: user.location,
             photos: user.photos,
             interests: user.interests,
+            mbti: user.mbti,
+            enneagram: user.enneagram,
+            lookingFor: user.looking_for,
             isPremium: user.is_premium,
             isOnline: user.is_online,
         });
@@ -79,7 +85,23 @@ router.get('/profile/:userId', authMiddleware, async (req: AuthRequest, res: Res
 // PUT /api/users/profile
 router.put('/profile', authMiddleware, async (req: AuthRequest, res: Response): Promise<void> => {
     try {
-        const { name, age, bio, gender, location, interests, photos } = req.body;
+        const { name, age, bio, gender, location, interests, photos, mbti, enneagram, lookingFor } = req.body;
+        console.log('PUT /profile REQ BODY:', req.body);
+
+        const params = [
+            name !== undefined ? name : null,
+            age !== undefined ? age : null,
+            bio !== undefined ? bio : null,
+            gender !== undefined ? gender : null,
+            location !== undefined ? location : null,
+            interests !== undefined ? interests : null,
+            photos !== undefined ? photos : null,
+            mbti !== undefined ? mbti : null,
+            enneagram !== undefined ? enneagram : null,
+            lookingFor !== undefined ? lookingFor : null,
+            req.userId
+        ];
+        console.log('PUT /profile PARAMS:', params);
 
         const result = await query(
             `UPDATE users SET
@@ -90,18 +112,23 @@ router.put('/profile', authMiddleware, async (req: AuthRequest, res: Response): 
         location = COALESCE($5, location),
         interests = COALESCE($6, interests),
         photos = COALESCE($7, photos),
+        mbti = COALESCE($8, mbti),
+        enneagram = COALESCE($9, enneagram),
+        looking_for = COALESCE($10, looking_for),
         updated_at = NOW()
-       WHERE id = $8
-       RETURNING id, email, name, age, bio, gender, location, photos, interests, is_premium, is_online`,
-            [name, age, bio, gender, location, interests, photos, req.userId]
+       WHERE id = $11
+       RETURNING id, email, name, age, bio, gender, location, photos, interests, mbti, enneagram, looking_for, is_premium, is_online`,
+            params
         );
 
         if (result.rows.length === 0) {
+            console.log('PUT /profile ERROR: User not found for id', req.userId);
             res.status(404).json({ error: 'User not found' });
             return;
         }
 
         const user = result.rows[0];
+        console.log('PUT /profile RETURNED DB ROW:', user);
         res.json({
             id: user.id,
             email: user.email,
@@ -112,6 +139,9 @@ router.put('/profile', authMiddleware, async (req: AuthRequest, res: Response): 
             location: user.location,
             photos: user.photos,
             interests: user.interests,
+            mbti: user.mbti,
+            enneagram: user.enneagram,
+            lookingFor: user.looking_for,
             isPremium: user.is_premium,
             isOnline: user.is_online,
             distance: 0,

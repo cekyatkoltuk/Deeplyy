@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { FontFamily } from '../utils/theme';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
 import { Colors, FontSizes, FontWeights, Spacing } from '../utils/theme';
 import { ConversationItem } from '../components/ConversationItem';
 import { AppHeader } from '../components/AppHeader';
@@ -14,8 +14,8 @@ export const ChatListScreen = ({ navigation }: any) => {
     }, []);
 
     return (
-        <View style={styles.container}>
-            <AppHeader />
+        <ImageBackground source={require('../../assets/backgrounds/background_1.png')} style={styles.container}>
+            <AppHeader titleImage={require('../../assets/titles/title_chat.png')} />
             {/* Header */}
             <View style={styles.header}>
                 <Text style={styles.title}>Messages</Text>
@@ -46,7 +46,7 @@ export const ChatListScreen = ({ navigation }: any) => {
                 contentContainerStyle={conversations.length === 0 ? styles.empty : undefined}
                 ListEmptyComponent={() => (
                     <View style={styles.emptyState}>
-                        <Text style={styles.emptyIcon}></Text>
+
                         <Text style={styles.emptyTitle}>No messages yet</Text>
                         <Text style={styles.emptySubtitle}>
                             Match with someone to start chatting!
@@ -54,7 +54,7 @@ export const ChatListScreen = ({ navigation }: any) => {
                     </View>
                 )}
             />
-        </View>
+        </ImageBackground>
     );
 };
 

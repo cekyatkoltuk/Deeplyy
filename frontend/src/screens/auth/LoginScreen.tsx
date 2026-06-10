@@ -8,6 +8,7 @@ import {
     Platform,
     ScrollView,
     TouchableOpacity,
+    Image,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors, FontSizes, FontWeights, Spacing, BorderRadius } from '../../utils/theme';
@@ -44,9 +45,11 @@ export const LoginScreen = ({ navigation }: any) => {
                 >
                     {/* Logo */}
                     <View style={styles.logoContainer}>
-                        <Text style={styles.logoIcon}>Flame</Text>
-                        <Text style={styles.logoText}>Flame</Text>
-                        <Text style={styles.tagline}>Find your perfect match</Text>
+                        <Image
+                            source={require('../../../assets/icons/connect_deeplyy_white.png')}
+                            style={styles.logoImage}
+                            resizeMode="contain"
+                        />
                     </View>
 
                     {/* Form */}
@@ -81,39 +84,13 @@ export const LoginScreen = ({ navigation }: any) => {
                             fullWidth
                             loading={isLoading}
                         />
-
-                        {/* Divider */}
-                        <View style={styles.divider}>
-                            <View style={styles.dividerLine} />
-                            <Text style={styles.dividerText}>or</Text>
-                            <View style={styles.dividerLine} />
-                        </View>
-
-                        {/* Social Login */}
-                        <Button
-                            title="Continue with Google"
-                            onPress={() => { }}
-                            variant="secondary"
-                            size="large"
-                            fullWidth
-                            icon={<Text style={styles.socialIcon}>G</Text>}
-                        />
-
-                        <Button
-                            title="Continue with Apple"
-                            onPress={() => { }}
-                            variant="secondary"
-                            size="large"
-                            fullWidth
-                            icon={<Text style={styles.socialIcon}>A</Text>}
-                        />
                     </View>
 
                     {/* Footer */}
                     <View style={styles.footer}>
                         <Text style={styles.footerText}>Don't have an account? </Text>
-                        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-                            <Text style={styles.footerLink}>Sign Up</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('Onboarding')}>
+                            <Text style={styles.footerLink}>Create Account</Text>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
@@ -136,25 +113,12 @@ const styles = StyleSheet.create({
     },
     logoContainer: {
         alignItems: 'center',
-        marginBottom: Spacing.xxl,
+        marginBottom: Spacing.xl,
     },
-    logoIcon: {
-        fontSize: 64,
-        fontFamily: FontFamily.heading,
-        marginBottom: Spacing.sm,
-    },
-    logoText: {
-        fontSize: FontSizes.hero,
-        fontFamily: FontFamily.heading,
-        fontWeight: FontWeights.extraBold,
-        color: Colors.primary,
-        letterSpacing: 2,
-    },
-    tagline: {
-        color: Colors.textSecondary,
-        fontSize: FontSizes.body,
-        fontFamily: FontFamily.body,
-        marginTop: Spacing.xs,
+    logoImage: {
+        width: '100%',
+        height: 160,
+        transform: [{ scale: 1.3 }],
     },
     form: {
         gap: Spacing.xs,
@@ -172,26 +136,6 @@ const styles = StyleSheet.create({
         fontSize: FontSizes.sm,
         fontFamily: FontFamily.small,
         fontWeight: FontWeights.medium,
-    },
-    divider: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginVertical: Spacing.md,
-    },
-    dividerLine: {
-        flex: 1,
-        height: 1,
-        backgroundColor: Colors.border,
-    },
-    dividerText: {
-        color: Colors.textMuted,
-        paddingHorizontal: Spacing.md,
-        fontSize: FontSizes.sm,
-        fontFamily: FontFamily.small,
-    },
-    socialIcon: {
-        fontSize: 20,
-        fontFamily: FontFamily.body,
     },
     footer: {
         flexDirection: 'row',

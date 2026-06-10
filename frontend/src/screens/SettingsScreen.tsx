@@ -113,32 +113,15 @@ export const SettingsScreen = ({ navigation }: any) => {
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Account</Text>
                     <TouchableOpacity style={styles.settingRow}>
+                        <Text style={styles.settingText}>Change Phone Number</Text>
+                        <Text style={styles.arrow}>›</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.settingRow}>
                         <Text style={styles.settingText}>Change Email</Text>
                         <Text style={styles.arrow}>›</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.settingRow}>
                         <Text style={styles.settingText}>Change Password</Text>
-                        <Text style={styles.arrow}>›</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.settingRow} onPress={() => navigation.navigate('BlockedUsers')}>
-                        <Text style={styles.settingText}>Blocked Users</Text>
-                        <Text style={styles.arrow}>›</Text>
-                    </TouchableOpacity>
-                </View>
-
-                {/* Legal */}
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Legal</Text>
-                    <TouchableOpacity style={styles.settingRow}>
-                        <Text style={styles.settingText}>Terms of Service</Text>
-                        <Text style={styles.arrow}>›</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.settingRow}>
-                        <Text style={styles.settingText}>Privacy Policy</Text>
-                        <Text style={styles.arrow}>›</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.settingRow}>
-                        <Text style={styles.settingText}>Licenses</Text>
                         <Text style={styles.arrow}>›</Text>
                     </TouchableOpacity>
                 </View>

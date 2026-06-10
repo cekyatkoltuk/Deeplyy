@@ -1,4 +1,4 @@
-# 🔥 Flame Dating App
+# 🔥 Deeplyy Dating App
 
 Modern bir tanışma uygulaması — React Native (Expo) frontend ve Express.js backend ile geliştirilmiştir.
 

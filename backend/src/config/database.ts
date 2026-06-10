@@ -9,14 +9,14 @@ export const pool = new Pool({
     port: parseInt(process.env.DB_PORT || '5432'),
     user: process.env.DB_USER || 'postgres',
     password: process.env.DB_PASSWORD || '123Password',
-    database: process.env.DB_NAME || 'flame_dating',
+    database: process.env.DB_NAME || 'deeplyy_dating',
     max: 20,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
 });
 
 pool.on('error', (err) => {
-    console.error(' Unexpected database error:', err);
+    console.error('Unexpected database error:', err);
 });
 
 export const query = (text: string, params?: any[]) => pool.query(text, params);

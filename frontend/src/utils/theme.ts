@@ -1,32 +1,32 @@
 export const Colors = {
   primary: '#EB3223', // Chili Red
   primaryGradientStart: '#EB3223',
-  primaryGradientEnd: '#EB5F23', // Flame
-  accent: '#EB5F23',
-  accentGradientStart: '#EB5F23',
-  accentGradientEnd: '#EB3223',
-  like: '#35FD5A', // Erin
+  primaryGradientEnd: '#EF615A', 
+  accent: '#B968CC',
+  accentGradientStart: '#B968CC',
+  accentGradientEnd: '#0E1D3D',
+  like: '#EF615A', 
   pass: '#EB3223',
-  superLike: '#38BDF8',
+  superLike: '#B968CC',
   gold: '#FBBF24',
 
   // Backgrounds
-  background: '#302D28', // Light black
-  surface: '#2A2722', // Dark black
-  surfaceLight: '#3D3932',
-  card: '#2A2722',
-  cardHover: '#3D3932',
+  background: '#0E1D3D', // Dark Navy
+  surface: '#0E1D3D', // Dark Navy
+  surfaceLight: '#B968CC',
+  card: '#0E1D3D',
+  cardHover: '#0E1D3D',
 
   // Text
   textPrimary: '#FFFFFF', // White
-  textSecondary: '#A0A0C0',
-  textMuted: '#6B6B8D',
+  textSecondary: '#FFFFFF',
+  textMuted: '#FFFFFF',
   textOnPrimary: '#FFFFFF',
 
   // Borders & misc
-  border: '#2A2722',
-  divider: '#2A2722',
-  overlay: 'rgba(42,39,34,0.8)',
+  border: '#0E1D3D',
+  divider: '#0E1D3D',
+  overlay: 'rgba(14,29,61,0.8)',
   premiumGold: '#FFD700',
   premiumGradientStart: '#FFD700',
   premiumGradientEnd: '#FFA500',

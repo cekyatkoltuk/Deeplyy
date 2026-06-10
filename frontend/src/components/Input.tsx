@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { FontFamily } from '../utils/theme';
-import { View, TextInput, Text, StyleSheet, ViewStyle, TextInputProps } from 'react-native';
+import { View, TextInput, Text, StyleSheet, ViewStyle, TextInputProps, TouchableOpacity } from 'react-native';
 import { Colors, FontSizes, FontWeights, BorderRadius, Spacing } from '../utils/theme';
 
 interface InputProps extends TextInputProps {
     label?: string;
     error?: string;
     icon?: React.ReactNode;
+    rightIcon?: React.ReactNode;
+    onRightIconPress?: () => void;
     containerStyle?: ViewStyle;
 }
 
@@ -14,6 +16,8 @@ export const Input: React.FC<InputProps> = ({
     label,
     error,
     icon,
+    rightIcon,
+    onRightIconPress,
     containerStyle,
     ...props
 }) => {
@@ -31,12 +35,26 @@ export const Input: React.FC<InputProps> = ({
             >
                 {icon && <View style={styles.iconContainer}>{icon}</View>}
                 <TextInput
-                    style={[styles.input, icon ? styles.inputWithIcon : null]}
+                    style={[
+                        styles.input, 
+                        icon ? styles.inputWithLeftIcon : null,
+                        rightIcon ? styles.inputWithRightIcon : null
+                    ]}
                     placeholderTextColor={Colors.textMuted}
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
                     {...props}
                 />
+                {rightIcon && (
+                    <TouchableOpacity 
+                        onPress={onRightIconPress} 
+                        style={styles.rightIconContainer}
+                        activeOpacity={onRightIconPress ? 0.7 : 1}
+                        disabled={!onRightIconPress}
+                    >
+                        {rightIcon}
+                    </TouchableOpacity>
+                )}
             </View>
             {error && <Text style={styles.error}>{error}</Text>}
         </View>
@@ -80,7 +98,14 @@ const styles = StyleSheet.create({
         paddingVertical: Spacing.md,
         paddingHorizontal: Spacing.md,
     },
-    inputWithIcon: {
+    inputWithLeftIcon: {
+        paddingLeft: Spacing.sm,
+    },
+    inputWithRightIcon: {
+        paddingRight: Spacing.sm,
+    },
+    rightIconContainer: {
+        paddingRight: Spacing.md,
         paddingLeft: Spacing.sm,
     },
     error: {

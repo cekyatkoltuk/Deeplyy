@@ -11,7 +11,6 @@ import { ChatListScreen } from '../screens/ChatListScreen';
 import { ChatRoomScreen } from '../screens/ChatRoomScreen';
 import { LikesMeScreen } from '../screens/LikesMeScreen';
 import { ProfileScreen } from '../screens/ProfileScreen';
-import { SettingsScreen } from '../screens/SettingsScreen';
 import { UserProfileViewScreen } from '../screens/UserProfileViewScreen';
 import { BlockedUsersScreen } from '../screens/BlockedUsersScreen';
 import { usePremiumStore } from '../store/premiumStore';
@@ -53,11 +52,6 @@ const ChatNavigator = () => (
 const ProfileNavigator = () => (
     <ProfileStack.Navigator screenOptions={{ headerShown: false }}>
         <ProfileStack.Screen name="ProfileMain" component={ProfileScreen} />
-        <ProfileStack.Screen
-            name="Settings"
-            component={SettingsScreen}
-            options={{ animation: 'slide_from_right' }}
-        />
         <ProfileStack.Screen
             name="BlockedUsers"
             component={BlockedUsersScreen}
@@ -191,15 +185,6 @@ export const MainTabNavigator = () => {
             }}
         >
             <Tab.Screen
-                name="ProfileTab"
-                component={ProfileNavigator}
-                options={{
-                    tabBarIcon: ({ focused }) => (
-                        <TabIcon name="profile" label="Profile" focused={focused} />
-                    ),
-                }}
-            />
-            <Tab.Screen
                 name="DiscoveryTab"
                 component={DiscoveryNavigator}
                 options={{
@@ -229,6 +214,15 @@ export const MainTabNavigator = () => {
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <TabIcon name="chat" label="Chat" focused={focused} badge={unreadMessages} />
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="ProfileTab"
+                component={ProfileNavigator}
+                options={{
+                    tabBarIcon: ({ focused }) => (
+                        <TabIcon name="profile" label="Profile" focused={focused} />
                     ),
                 }}
             />

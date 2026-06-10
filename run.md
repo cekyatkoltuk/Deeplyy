@@ -14,7 +14,7 @@ npm run dev
 Başarılı çıktı:
 
 ```
-🔥 Flame Dating API running on port 3000
+🔥 Deeplyy Dating API running on port 3000
    └── Health: http://localhost:3000/api/health
 🌱 Seed data loaded
 ```

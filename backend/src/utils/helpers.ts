@@ -5,8 +5,8 @@ import path from 'path';
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
-const JWT_SECRET = process.env.JWT_SECRET || 'flame-dating-super-secret-key-2026';
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'flame-dating-refresh-secret-key-2026';
+const JWT_SECRET = process.env.JWT_SECRET || 'deeplyy-dating-super-secret-key-2026';
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'deeplyy-dating-refresh-secret-key-2026';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 const JWT_REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || '30d';
 

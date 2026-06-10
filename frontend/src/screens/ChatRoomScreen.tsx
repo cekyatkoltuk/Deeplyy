@@ -113,7 +113,7 @@ export const ChatRoomScreen = ({ route, navigation }: any) => {
                     <View style={styles.headerInfo}>
                         <Text style={styles.headerName}>{userName}</Text>
                         <Text style={[styles.headerStatus, blocked && styles.headerBlocked]}>
-                            {blocked ? ' Blocked' : isOnline ? 'Online' : 'Offline'}
+                            {blocked ? 'Blocked' : isOnline ? 'Online' : 'Offline'}
                         </Text>
                     </View>
                 </TouchableOpacity>
@@ -139,7 +139,7 @@ export const ChatRoomScreen = ({ route, navigation }: any) => {
             {/* Blocked banner OR Input bar */}
             {blocked ? (
                 <View style={styles.blockedBanner}>
-                    <Text style={styles.blockedIcon}></Text>
+
                     <Text style={styles.blockedText}>You blocked this user</Text>
                     <TouchableOpacity style={styles.unblockBannerBtn} onPress={handleUnblock}>
                         <Text style={styles.unblockBannerText}>Unblock</Text>
@@ -148,7 +148,7 @@ export const ChatRoomScreen = ({ route, navigation }: any) => {
             ) : (
                 <View style={styles.inputBar}>
                     <TouchableOpacity style={styles.attachBtn}>
-                        <Text style={styles.attachIcon}></Text>
+                        <Text style={styles.attachIcon}>+</Text>
                     </TouchableOpacity>
                     <TextInput
                         style={styles.input}
@@ -160,14 +160,14 @@ export const ChatRoomScreen = ({ route, navigation }: any) => {
                         maxLength={500}
                     />
                     <TouchableOpacity style={styles.mediaBtn}>
-                        <Text style={styles.mediaIcon}></Text>
+                        <Text style={styles.mediaIcon}>+</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[styles.sendBtn, text.trim() ? styles.sendBtnActive : null]}
                         onPress={handleSend}
                         disabled={!text.trim()}
                     >
-                        <Text style={styles.sendIcon}></Text>
+                        <Text style={styles.sendIcon}>➤</Text>
                     </TouchableOpacity>
                 </View>
             )}
@@ -181,29 +181,29 @@ export const ChatRoomScreen = ({ route, navigation }: any) => {
                 >
                     <View style={styles.menuContent}>
                         <TouchableOpacity style={styles.menuItem} onPress={handleViewProfile}>
-                            <Text style={styles.menuIcon}></Text>
+
                             <Text style={styles.menuText}>View Profile</Text>
                         </TouchableOpacity>
                         <View style={styles.menuDivider} />
                         <TouchableOpacity style={styles.menuItem} onPress={() => setShowMenu(false)}>
-                            <Text style={styles.menuIcon}></Text>
+
                             <Text style={styles.menuText}>Mute Notifications</Text>
                         </TouchableOpacity>
                         <View style={styles.menuDivider} />
                         {blocked ? (
                             <TouchableOpacity style={styles.menuItem} onPress={handleUnblock}>
-                                <Text style={styles.menuIcon}></Text>
+
                                 <Text style={styles.menuText}>Unblock User</Text>
                             </TouchableOpacity>
                         ) : (
                             <TouchableOpacity style={styles.menuItem} onPress={handleBlock}>
-                                <Text style={styles.menuIcon}></Text>
+
                                 <Text style={[styles.menuText, styles.menuDanger]}>Block User</Text>
                             </TouchableOpacity>
                         )}
                         <View style={styles.menuDivider} />
                         <TouchableOpacity style={styles.menuItem} onPress={handleReport}>
-                            <Text style={styles.menuIcon}></Text>
+
                             <Text style={[styles.menuText, styles.menuDanger]}>Report</Text>
                         </TouchableOpacity>
                     </View>

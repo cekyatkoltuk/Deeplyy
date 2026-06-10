@@ -10,6 +10,7 @@ import {
     Modal,
     TextInput,
     Alert,
+    ImageBackground,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
@@ -24,7 +25,7 @@ import { AppHeader } from '../components/AppHeader';
 import { useUserStore } from '../store/userStore';
 import { usePremiumStore } from '../store/premiumStore';
 import { useAuthStore } from '../store/authStore';
-import { INTERESTS } from '../utils/constants';
+import { INTERESTS, GENDER_OPTIONS, MBTI_OPTIONS, ENNEAGRAM_OPTIONS, LOOKING_FOR_OPTIONS } from '../utils/constants';
 
 export const ProfileScreen = ({ navigation }: any) => {
     const { profile, setInterests, loadProfile, updateProfile, uploadPhoto, removePhoto } = useUserStore();
@@ -33,9 +34,16 @@ export const ProfileScreen = ({ navigation }: any) => {
     const [showPremiumModal, setShowPremiumModal] = useState(false);
     const [editingInterests, setEditingInterests] = useState(false);
     const [editingBio, setEditingBio] = useState(false);
+    const [editingName, setEditingName] = useState(false);
+    const [editingGender, setEditingGender] = useState(false);
+    const [editingMbti, setEditingMbti] = useState(false);
+    const [editingEnneagram, setEditingEnneagram] = useState(false);
+    const [editingLookingFor, setEditingLookingFor] = useState(false);
+    
     const [bioText, setBioText] = useState(profile.bio);
     const [showPhotoInput, setShowPhotoInput] = useState(false);
     const [photoUrl, setPhotoUrl] = useState('');
+    const [nameText, setNameText] = useState(profile.name);
 
     useEffect(() => {
         loadProfile();
@@ -44,19 +52,44 @@ export const ProfileScreen = ({ navigation }: any) => {
 
     useEffect(() => {
         setBioText(profile.bio);
-    }, [profile.bio]);
+        setNameText(profile.name);
+    }, [profile]);
 
     const toggleInterest = (interest: string) => {
         const current = profile.interests;
+        if (!current.includes(interest) && current.length >= 6) {
+            return;
+        }
         const updated = current.includes(interest)
             ? current.filter((i) => i !== interest)
             : [...current, interest];
         setInterests(updated);
     };
 
-    const handleSaveBio = () => {
-        updateProfile({ bio: bioText } as any);
-        setEditingBio(false);
+    const handleSaveBio = async () => {
+        try {
+            await updateProfile({ bio: bioText });
+            setEditingBio(false);
+        } catch (error) {
+            if (typeof window !== 'undefined') {
+                alert('Failed to save bio. Please try logging in again.');
+            } else {
+                Alert.alert('Error', 'Failed to save bio. Please try logging in again.');
+            }
+        }
+    };
+
+    const handleSaveName = async () => {
+        try {
+            await updateProfile({ name: nameText });
+            setEditingName(false);
+        } catch (error) {
+            if (typeof window !== 'undefined') {
+                alert('Failed to save name.');
+            } else {
+                Alert.alert('Error', 'Failed to save name.');
+            }
+        }
     };
 
     const handleAddPhoto = () => {
@@ -89,8 +122,8 @@ export const ProfileScreen = ({ navigation }: any) => {
     };
 
     return (
-        <View style={styles.container}>
-            <AppHeader />
+        <ImageBackground source={require('../../assets/backgrounds/background_3.png')} style={styles.container}>
+            <AppHeader titleImage={require('../../assets/titles/title_profile.png')} />
             <ScrollView contentContainerStyle={styles.scrollContent}>
                 {/* Profile Header */}
                 <View style={styles.profileHeader}>
@@ -102,14 +135,23 @@ export const ProfileScreen = ({ navigation }: any) => {
                             name={profile.name}
                         />
                         <TouchableOpacity style={styles.editAvatarBtn} onPress={() => setShowPhotoInput(true)}>
-                            <Text style={styles.editAvatarIcon}></Text>
+                            <Text style={styles.editAvatarIcon}>+</Text>
                         </TouchableOpacity>
                     </View>
-                    <Text style={styles.profileName}>
-                        {profile.name}, {profile.age}
-                        {isPremium && ' '}
-                    </Text>
-                    <Text style={styles.profileLocation}> {profile.location || 'No location set'}</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                        <Image 
+                            source={
+                                profile.gender === 'female' ? require('../../assets/icons/female_icon.png') :
+                                profile.gender === 'male' ? require('../../assets/icons/male_icon.png') :
+                                require('../../assets/icons/other_genders_icon.png')
+                            } 
+                            style={{ width: 24, height: 24 }} 
+                        />
+                        <Text style={styles.profileName}>
+                            {profile.name}, {profile.age}
+                        </Text>
+                    </View>
+                    <Text style={styles.profileLocation}>📍 {profile.location || 'No location set'}</Text>
                     {isPremium && (
                         <View style={styles.premiumTag}>
                             <Text style={styles.premiumTagText}> Premium Member</Text>
@@ -129,7 +171,7 @@ export const ProfileScreen = ({ navigation }: any) => {
                             end={{ x: 1, y: 0 }}
                             style={styles.premiumCtaGradient}
                         >
-                            <Text style={styles.premiumCtaIcon}></Text>
+                            <Text style={styles.premiumCtaIcon}>★</Text>
                             <View style={styles.premiumCtaText}>
                                 <Text style={styles.premiumCtaTitle}>Upgrade to Premium</Text>
                                 <Text style={styles.premiumCtaSubtitle}>
@@ -140,6 +182,32 @@ export const ProfileScreen = ({ navigation }: any) => {
                         </LinearGradient>
                     </TouchableOpacity>
                 )}
+
+                {/* Basic Details Section */}
+                <View style={styles.section}>
+                    <View style={styles.sectionHeader}>
+                        <Text style={styles.sectionTitle}>Name</Text>
+                        <TouchableOpacity onPress={() => setEditingName(!editingName)}>
+                            <Text style={styles.editBtn}>
+                                {editingName ? 'Cancel' : 'Edit'}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    {editingName ? (
+                        <View style={{ gap: Spacing.sm }}>
+                            <TextInput
+                                style={[styles.bioInput, { minHeight: 40 }]}
+                                value={nameText}
+                                onChangeText={setNameText}
+                                placeholder="Your Name"
+                                placeholderTextColor={Colors.textMuted}
+                            />
+                            <Button title="Save Name" onPress={handleSaveName} size="small" style={styles.saveBtn} />
+                        </View>
+                    ) : (
+                        <Text style={styles.bioText}>{profile.name}</Text>
+                    )}
+                </View>
 
                 {/* Bio Section */}
                 <View style={styles.section}>
@@ -174,7 +242,7 @@ export const ProfileScreen = ({ navigation }: any) => {
                         </View>
                     ) : (
                         <Text style={styles.bioText}>
-                            {profile.bio || 'Tap "Edit" to add your bio '}
+                            {profile.bio || 'Tap "Edit" to add your bio'}
                         </Text>
                     )}
                 </View>
@@ -212,7 +280,7 @@ export const ProfileScreen = ({ navigation }: any) => {
                                     onPress={() => handleRemovePhoto(idx)}
                                     hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                                 >
-                                    <Text style={styles.removePhotoText}></Text>
+                                    <Text style={styles.removePhotoText}>✕</Text>
                                 </TouchableOpacity>
                             </View>
                         ))}
@@ -231,7 +299,14 @@ export const ProfileScreen = ({ navigation }: any) => {
                 {/* Interests Section */}
                 <View style={styles.section}>
                     <View style={styles.sectionHeader}>
-                        <Text style={styles.sectionTitle}>Interests</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.sm }}>
+                            <Text style={styles.sectionTitle}>Interests</Text>
+                            {editingInterests && (
+                                <Text style={{ color: Colors.textSecondary, fontSize: FontSizes.sm, fontFamily: FontFamily.body }}>
+                                    {profile.interests.length}/6
+                                </Text>
+                            )}
+                        </View>
                         <TouchableOpacity onPress={() => setEditingInterests(!editingInterests)}>
                             <Text style={styles.editBtn}>
                                 {editingInterests ? 'Done' : 'Edit'}
@@ -251,22 +326,120 @@ export const ProfileScreen = ({ navigation }: any) => {
                     </View>
                 </View>
 
+                {/* Gender Section */}
+                <View style={styles.section}>
+                    <View style={styles.sectionHeader}>
+                        <Text style={styles.sectionTitle}>Gender</Text>
+                        <TouchableOpacity onPress={() => setEditingGender(!editingGender)}>
+                            <Text style={styles.editBtn}>
+                                {editingGender ? 'Done' : 'Edit'}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    {editingGender ? (
+                        <View style={styles.interestsGrid}>
+                            {GENDER_OPTIONS.map((opt) => (
+                                <InterestTag
+                                    key={opt.value}
+                                    label={opt.label}
+                                    selected={profile.gender === opt.value}
+                                    onPress={() => updateProfile({ gender: opt.value } as any)}
+                                    size="small"
+                                />
+                            ))}
+                        </View>
+                    ) : (
+                        <Text style={styles.bioText}>{GENDER_OPTIONS.find(o => o.value === profile.gender)?.label || profile.gender}</Text>
+                    )}
+                </View>
+
+                {/* MBTI Section */}
+                <View style={styles.section}>
+                    <View style={styles.sectionHeader}>
+                        <Text style={styles.sectionTitle}>MBTI</Text>
+                        <TouchableOpacity onPress={() => setEditingMbti(!editingMbti)}>
+                            <Text style={styles.editBtn}>
+                                {editingMbti ? 'Done' : 'Edit'}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    {editingMbti ? (
+                        <View style={styles.interestsGrid}>
+                            {MBTI_OPTIONS.map((opt) => (
+                                <InterestTag
+                                    key={opt}
+                                    label={opt}
+                                    selected={profile.mbti === opt}
+                                    onPress={() => updateProfile({ mbti: opt } as any)}
+                                    size="small"
+                                />
+                            ))}
+                        </View>
+                    ) : (
+                        <Text style={styles.bioText}>{profile.mbti || 'Tap "Edit" to set MBTI'}</Text>
+                    )}
+                </View>
+
+                {/* Enneagram Section */}
+                <View style={styles.section}>
+                    <View style={styles.sectionHeader}>
+                        <Text style={styles.sectionTitle}>Enneagram</Text>
+                        <TouchableOpacity onPress={() => setEditingEnneagram(!editingEnneagram)}>
+                            <Text style={styles.editBtn}>
+                                {editingEnneagram ? 'Done' : 'Edit'}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    {editingEnneagram ? (
+                        <View style={styles.interestsGrid}>
+                            {ENNEAGRAM_OPTIONS.map((opt) => (
+                                <InterestTag
+                                    key={opt}
+                                    label={opt}
+                                    selected={profile.enneagram === opt}
+                                    onPress={() => updateProfile({ enneagram: opt } as any)}
+                                    size="small"
+                                />
+                            ))}
+                        </View>
+                    ) : (
+                        <Text style={styles.bioText}>{profile.enneagram || 'Tap "Edit" to set Enneagram'}</Text>
+                    )}
+                </View>
+
+                {/* Looking For Section */}
+                <View style={styles.section}>
+                    <View style={styles.sectionHeader}>
+                        <Text style={styles.sectionTitle}>Looking For</Text>
+                        <TouchableOpacity onPress={() => setEditingLookingFor(!editingLookingFor)}>
+                            <Text style={styles.editBtn}>
+                                {editingLookingFor ? 'Done' : 'Edit'}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    {editingLookingFor ? (
+                        <View style={styles.interestsGrid}>
+                            {LOOKING_FOR_OPTIONS.map((opt) => (
+                                <InterestTag
+                                    key={opt.value}
+                                    label={opt.value}
+                                    selected={profile.lookingFor === opt.value}
+                                    onPress={() => updateProfile({ lookingFor: opt.value } as any)}
+                                    size="small"
+                                />
+                            ))}
+                        </View>
+                    ) : (
+                        <Text style={styles.bioText}>{profile.lookingFor || 'Tap "Edit" to set what you are looking for'}</Text>
+                    )}
+                </View>
+
                 {/* Settings Section */}
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Settings</Text>
 
-                    <TouchableOpacity
-                        style={styles.settingRow}
-                        onPress={() => navigation.navigate('Settings')}
-                    >
-                        <Text style={styles.settingIcon}></Text>
-                        <Text style={styles.settingText}>App Settings</Text>
-                        <Text style={styles.settingArrow}>›</Text>
-                    </TouchableOpacity>
-
                     {/* Dev Toggle for Premium */}
                     <View style={styles.settingRow}>
-                        <Text style={styles.settingIcon}></Text>
                         <Text style={styles.settingText}>Premium (Dev Toggle)</Text>
                         <Switch
                             value={isPremium}
@@ -275,18 +448,6 @@ export const ProfileScreen = ({ navigation }: any) => {
                             thumbColor={Colors.white}
                         />
                     </View>
-
-                    <TouchableOpacity style={styles.settingRow}>
-                        <Text style={styles.settingIcon}></Text>
-                        <Text style={styles.settingText}>Notifications</Text>
-                        <Text style={styles.settingArrow}>›</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.settingRow}>
-                        <Text style={styles.settingIcon}></Text>
-                        <Text style={styles.settingText}>Privacy & Safety</Text>
-                        <Text style={styles.settingArrow}>›</Text>
-                    </TouchableOpacity>
                 </View>
 
                 {/* Subscription Status */}
@@ -294,7 +455,7 @@ export const ProfileScreen = ({ navigation }: any) => {
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>Subscription</Text>
                         <View style={styles.subscriptionCard}>
-                            <Text style={styles.subscriptionPlan}> Premium Monthly</Text>
+                            <Text style={styles.subscriptionPlan}>Premium Monthly</Text>
                             <Text style={styles.subscriptionDate}>
                                 Renews: March 28, 2026
                             </Text>
@@ -306,16 +467,17 @@ export const ProfileScreen = ({ navigation }: any) => {
                 )}
 
                 {/* Logout */}
-                <Button
-                    title="Log Out"
-                    onPress={logout}
-                    variant="outline"
-                    size="large"
-                    fullWidth
-                    style={styles.logoutBtn}
-                />
+                <View style={styles.logoutContainer}>
+                    <Button
+                        title="Log Out"
+                        onPress={logout}
+                        variant="outline"
+                        size="large"
+                        fullWidth
+                    />
+                </View>
 
-                <Text style={styles.version}>Flame v1.0.0</Text>
+                <Text style={styles.version}>Deeplyy v1.0.0</Text>
             </ScrollView>
 
             <PremiumModal
@@ -359,7 +521,7 @@ export const ProfileScreen = ({ navigation }: any) => {
                     </View>
                 </View>
             </Modal>
-        </View>
+        </ImageBackground>
     );
 };
 
@@ -611,9 +773,6 @@ const styles = StyleSheet.create({
     settingIcon: {
         fontSize: 22,
         fontFamily: FontFamily.body,
-    
-        width: 32,
-        textAlign: 'center',
     },
     settingText: {
         flex: 1,
@@ -652,8 +811,8 @@ const styles = StyleSheet.create({
         fontWeight: FontWeights.medium,
         marginTop: Spacing.xs,
     },
-    logoutBtn: {
-        marginHorizontal: Spacing.lg,
+    logoutContainer: {
+        paddingHorizontal: Spacing.lg,
         marginTop: Spacing.md,
     },
     version: {

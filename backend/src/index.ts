@@ -25,19 +25,24 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
     cors: {
-        origin: process.env.CORS_ORIGIN || 'http://localhost:8081',
+        origin: true,
         methods: ['GET', 'POST'],
+        credentials: true,
     },
 });
 
 // Middleware
+app.use((req, res, next) => {
+    console.log(`[REQUEST] ${req.method} ${req.url}`);
+    next();
+});
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:8081',
+    origin: true,
     credentials: true,
 }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // API Routes
 app.use('/api/auth', authRoutes);
@@ -70,11 +75,11 @@ const initDatabase = async () => {
         });
 
         try {
-            await tempPool.query(`CREATE DATABASE flame_dating`);
-            console.log(' Database "flame_dating" created');
+            await tempPool.query(`CREATE DATABASE deeplyy_dating`);
+            console.log('Database "deeplyy_dating" created');
         } catch (err: any) {
             if (err.code === '42P04') {
-                console.log(' Database "flame_dating" already exists');
+                console.log('Database "deeplyy_dating" already exists');
             } else {
                 throw err;
             }
@@ -85,23 +90,23 @@ const initDatabase = async () => {
         const schemaPath = path.resolve(__dirname, '../sql/schema.sql');
         const schema = fs.readFileSync(schemaPath, 'utf-8');
         await query(schema);
-        console.log(' Database schema applied');
+        console.log('Database schema applied');
 
-        // Run seed
+        // Run seed (reloads seed data on startup, updating interests/bios)
         const seedPath = path.resolve(__dirname, '../sql/seed.sql');
         const seed = fs.readFileSync(seedPath, 'utf-8');
         await query(seed);
-        console.log(' Seed data loaded');
+        console.log('Seed data loaded successfully');
 
     } catch (error) {
-        console.error(' Database initialization error:', error);
+        console.error('Database initialization error:', error);
         process.exit(1);
     }
 };
 
 initDatabase().then(() => {
     httpServer.listen(PORT, () => {
-        console.log(`\n Flame Dating API Server`);
+        console.log(`\nDeeplyy Dating API Server`);
         console.log(`   ├── REST:   http://localhost:${PORT}/api`);
         console.log(`   ├── Socket: http://localhost:${PORT}`);
         console.log(`   └── Health: http://localhost:${PORT}/api/health\n`);

@@ -1,43 +1,37 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ImageSourcePropType } from 'react-native';
 import { useNavigation, NavigationProp, useRoute } from '@react-navigation/native';
 import { usePremiumStore } from '../store/premiumStore';
 import { Colors, FontSizes, FontWeights, Spacing, FontFamily } from '../utils/theme';
 import { Ionicons } from '@expo/vector-icons';
 
 interface AppHeaderProps {
-    onFilterPress?: () => void;
+    titleImage?: ImageSourcePropType;
 }
 
-export const AppHeader = ({ onFilterPress }: AppHeaderProps = {}) => {
+export const AppHeader = ({ titleImage }: AppHeaderProps = {}) => {
     const navigation = useNavigation<NavigationProp<any>>();
     const { isPremium } = usePremiumStore();
 
-    const handleFilterPress = () => {
-        if (onFilterPress) {
-            onFilterPress();
-            return;
-        }
-        // Navigate cross-tab (for screens outside the Discovery stack)
-        navigation.navigate('DiscoveryTab', { screen: 'DiscoveryFilters' });
+    const handleSettingsPress = () => {
+        navigation.navigate('Settings');
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.logo}>Flame</Text>
-            <TouchableOpacity
-                style={styles.filterBtn}
-                onPress={handleFilterPress}
-            >
-                <Ionicons name="settings-outline" size={22} color={Colors.textSecondary} />
-                {!isPremium && (
-                    <Ionicons
-                        name="lock-closed"
-                        size={10}
-                        color={Colors.textMuted}
-                        style={styles.lockBadge}
-                    />
+            <View style={styles.leftContainer}>
+                <Image source={require('../../assets/titles/title_deeplyy_icon.png')} style={styles.deeplyyIcon} resizeMode="contain" />
+                {titleImage ? (
+                    <Image source={titleImage} style={styles.titleImage} resizeMode="contain" />
+                ) : (
+                    <Text style={styles.logo}>Deeplyy</Text>
                 )}
+            </View>
+            <TouchableOpacity
+                style={styles.settingsBtn}
+                onPress={handleSettingsPress}
+            >
+                <Image source={require('../../assets/icons/settings.png')} style={styles.settingsIcon} resizeMode="contain" />
             </TouchableOpacity>
         </View>
     );
@@ -51,9 +45,16 @@ const styles = StyleSheet.create({
         paddingHorizontal: Spacing.lg,
         height: 65,
         paddingTop: 10,
-        backgroundColor: Colors.surface,
-        borderBottomWidth: 1,
-        borderBottomColor: Colors.border,
+        backgroundColor: 'transparent',
+    },
+    leftContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+    },
+    deeplyyIcon: {
+        width: 24,
+        height: 24,
     },
     logo: {
         fontSize: FontSizes.xl,
@@ -61,13 +62,18 @@ const styles = StyleSheet.create({
         fontWeight: FontWeights.bold,
         color: Colors.primary,
     },
-    filterBtn: {
+    titleImage: {
+        height: 32,
+        width: 120,
+        justifyContent: 'center',
+    },
+    settingsBtn: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 2,
+        padding: 4,
     },
-    lockBadge: {
-        marginLeft: -4,
-        marginTop: -8,
+    settingsIcon: {
+        width: 28,
+        height: 28,
     },
 });

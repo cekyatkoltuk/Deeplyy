@@ -2,7 +2,7 @@ import { io, Socket } from 'socket.io-client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNotificationStore } from '../store/notificationStore';
 
-const SOCKET_URL = 'http://localhost:3000';
+const SOCKET_URL = 'http://192.168.1.104:3000';
 
 let socket: Socket | null = null;
 
