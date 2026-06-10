@@ -22,11 +22,24 @@ const MOCK_PROFILES = [
 ];
 
 const MOCK_CONVERSATIONS = [
-    { id: 'conv-1', matchId: 'match-1', participants: [MOCK_USER, MOCK_PROFILES[0]], lastMessage: { text: 'Hey there!', createdAt: new Date().toISOString() }, unreadCount: 1 }
+    { 
+        id: 'conv-1', 
+        user: MOCK_PROFILES[0], 
+        lastMessage: { 
+            id: 'msg-1', 
+            senderId: '2', 
+            text: 'Hey there!', 
+            type: 'text', 
+            read: false, 
+            timestamp: new Date().toISOString() 
+        }, 
+        unreadCount: 1, 
+        isTyping: false 
+    }
 ];
 
 const MOCK_MESSAGES = [
-    { id: 'msg-1', senderId: '2', text: 'Hey there!', createdAt: new Date().toISOString() }
+    { id: 'msg-1', senderId: '2', text: 'Hey there!', type: 'text', read: false, timestamp: new Date().toISOString() }
 ];
 
 const mockDelay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -82,7 +95,7 @@ const mockRequest = async (method: string, url: string, data?: any) => {
     }
     if (url.includes('/chat/messages')) {
         if (method === 'POST') {
-            return createMockResponse({ id: Math.random().toString(), senderId: 'mock-user-1', text: data?.text || '', createdAt: new Date().toISOString() });
+            return createMockResponse({ id: Math.random().toString(), senderId: 'mock-user-1', text: data?.text || '', type: 'text', read: true, timestamp: new Date().toISOString() });
         }
         return createMockResponse(MOCK_MESSAGES);
     }
