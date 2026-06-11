@@ -159,14 +159,14 @@ const styles = StyleSheet.create({
     },
     ageLabelText: {
         color: Colors.white,
-        fontSize: 34,
+        fontSize: 30,
         fontFamily: CARD_FONT,
-        lineHeight: 30,
+        lineHeight: 28,
         opacity: 0.85,
     },
     age: {
         color: Colors.white,
-        fontSize: 32,
+        fontSize: 30,
         fontFamily: CARD_FONT,
         lineHeight: 36,
     },
