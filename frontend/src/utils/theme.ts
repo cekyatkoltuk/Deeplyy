@@ -5,7 +5,7 @@ export const Colors = {
   accent: '#B968CC',
   accentGradientStart: '#B968CC',
   accentGradientEnd: '#0E1D3D',
-  like: '#EF615A', 
+  like: '#B968CC', 
   pass: '#EB3223',
   superLike: '#B968CC',
   gold: '#FBBF24',

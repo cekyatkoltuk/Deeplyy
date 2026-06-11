@@ -49,7 +49,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/swipes', swipeRoutes(io));
 app.use('/api/matches', matchRoutes);
-app.use('/api/chat', chatRoutes);
+app.use('/api/chat', chatRoutes(io));
 app.use('/api/subscriptions', subscriptionRoutes);
 
 // Health check

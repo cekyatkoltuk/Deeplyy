@@ -11,12 +11,21 @@ const api = axios.create({
     },
 });
 
-// Request interceptor — attach token from storage
+// In-memory token cache to avoid slow AsyncStorage reads on every request
+let cachedToken: string | null = null;
+
+export const setCachedToken = (token: string | null) => {
+    cachedToken = token;
+};
+
+// Request interceptor — attach token from memory cache (falls back to storage)
 api.interceptors.request.use(
     async (config) => {
-        const token = await AsyncStorage.getItem('token');
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+        if (!cachedToken) {
+            cachedToken = await AsyncStorage.getItem('token');
+        }
+        if (cachedToken) {
+            config.headers.Authorization = `Bearer ${cachedToken}`;
         }
         return config;
     },
@@ -32,11 +41,14 @@ api.interceptors.response.use(
             if (refreshToken) {
                 try {
                     const res = await axios.post(`${API_BASE_URL}/auth/refresh`, { refreshToken });
-                    await AsyncStorage.setItem('token', res.data.token);
+                    const newToken = res.data.token;
+                    await AsyncStorage.setItem('token', newToken);
                     await AsyncStorage.setItem('refreshToken', res.data.refreshToken);
-                    error.config.headers.Authorization = `Bearer ${res.data.token}`;
+                    cachedToken = newToken;
+                    error.config.headers.Authorization = `Bearer ${newToken}`;
                     return api(error.config);
                 } catch {
+                    cachedToken = null;
                     await AsyncStorage.multiRemove(['token', 'refreshToken']);
                 }
             }

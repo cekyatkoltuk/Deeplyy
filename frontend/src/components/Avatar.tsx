@@ -49,23 +49,18 @@ export const Avatar: React.FC<AvatarProps> = ({
                     </Text>
                 </View>
             )}
-            {isOnline && (
+            {isOnline !== undefined && (
                 <View
                     style={[
                         styles.onlineDot,
                         {
+                            backgroundColor: isOnline ? Colors.online : '#EB3223',
                             width: size * 0.24,
                             height: size * 0.24,
                             borderRadius: size * 0.12,
-                            borderWidth: size * 0.05,
                         },
                     ]}
                 />
-            )}
-            {isPremium && (
-                <View style={[styles.premiumBadge, { bottom: -2, right: -2 }]}>
-                    <Text style={styles.premiumIcon}>P</Text>
-                </View>
             )}
         </View>
     );
@@ -95,14 +90,5 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         right: 0,
-        backgroundColor: Colors.online,
-        borderColor: Colors.surface,
-    },
-    premiumBadge: {
-        position: 'absolute',
-    },
-    premiumIcon: {
-        fontSize: 14,
-        fontFamily: FontFamily.small,
     },
 });

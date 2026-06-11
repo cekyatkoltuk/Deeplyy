@@ -18,8 +18,12 @@ import { Colors, FontSizes, FontWeights, Spacing, BorderRadius, Shadows } from '
 import { InterestTag } from '../components/InterestTag';
 import { AppHeader } from '../components/AppHeader';
 import api from '../services/api';
+import { useNotificationStore } from '../store/notificationStore';
+import { getFlagForLocation } from '../utils/countries';
+import { socketService } from '../services/socket';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: windowWidth, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const SCREEN_WIDTH = Math.min(windowWidth, 500);
 
 interface LikeUser {
     id: string;
@@ -30,6 +34,9 @@ interface LikeUser {
     location: string;
     gender: string;
     bio: string;
+    mbti?: string;
+    enneagram?: string;
+    lookingFor?: string;
     isOnline: boolean;
     isPremium: boolean;
     distance: number;
@@ -49,11 +56,36 @@ export const LikesMeScreen = () => {
     const [likes, setLikes] = useState<LikeUser[]>([]);
     const [selectedUser, setSelectedUser] = useState<LikeUser | null>(null);
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalPhotoIndex, setModalPhotoIndex] = useState(0);
     const [refreshing, setRefreshing] = useState(false);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         loadLikes();
+
+        // Auto-refresh when a new like arrives via socket
+        const handleNewLike = () => {
+            loadLikes();
+        };
+        socketService.on('new_like', handleNewLike);
+
+        const handleStatusChange = (data: { userId: string; isOnline: boolean }) => {
+            setLikes((prev) =>
+                prev.map((u) => (u.id === data.userId ? { ...u, isOnline: data.isOnline } : u))
+            );
+            setSelectedUser((prev) => {
+                if (prev && prev.id === data.userId) {
+                    return { ...prev, isOnline: data.isOnline };
+                }
+                return prev;
+            });
+        };
+        socketService.on('user_status_change', handleStatusChange);
+
+        return () => {
+            socketService.off('new_like', handleNewLike);
+            socketService.off('user_status_change', handleStatusChange);
+        };
     }, []);
 
     const loadLikes = async () => {
@@ -61,6 +93,7 @@ export const LikesMeScreen = () => {
             setLoading(true);
             const res = await api.get('/matches/likes');
             setLikes(res.data);
+            useNotificationStore.getState().setUnreadLikes(res.data.length);
         } catch (error) {
             console.error('Failed to load likes:', error);
         } finally {
@@ -73,6 +106,7 @@ export const LikesMeScreen = () => {
         try {
             const res = await api.get('/matches/likes');
             setLikes(res.data);
+            useNotificationStore.getState().setUnreadLikes(res.data.length);
         } catch (error) {
             console.error('Failed to refresh likes:', error);
         } finally {
@@ -88,13 +122,18 @@ export const LikesMeScreen = () => {
     const closeProfile = () => {
         setModalVisible(false);
         setSelectedUser(null);
+        setModalPhotoIndex(0);
     };
 
     const handleLikeBack = async (userId: string) => {
         try {
             await api.post('/swipes/like', { userId });
-            // Remove from likes list (they become a match now)
-            setLikes(prev => prev.filter(u => u.id !== userId));
+            // Remove from likes list (they become a match now) and update notification count
+            setLikes(prev => {
+                const newLikes = prev.filter(u => u.id !== userId);
+                useNotificationStore.getState().setUnreadLikes(newLikes.length);
+                return newLikes;
+            });
             closeProfile();
         } catch (error) {
             console.error('Failed to like back:', error);
@@ -104,8 +143,12 @@ export const LikesMeScreen = () => {
     const handlePass = async (userId: string) => {
         try {
             await api.post('/swipes/pass', { userId });
-            // Remove from likes list
-            setLikes(prev => prev.filter(u => u.id !== userId));
+            // Remove from likes list and update notification count
+            setLikes(prev => {
+                const newLikes = prev.filter(u => u.id !== userId);
+                useNotificationStore.getState().setUnreadLikes(newLikes.length);
+                return newLikes;
+            });
             closeProfile();
         } catch (error) {
             console.error('Failed to pass:', error);
@@ -127,14 +170,13 @@ export const LikesMeScreen = () => {
                 {/* Dark gradient overlay */}
                 <View style={styles.cardOverlay} />
 
-                {/* Online indicator */}
-                {item.isOnline && <View style={styles.onlineDot} />}
-
-                {/* Bottom info row: gender icon + name + age */}
+                {/* Bottom info row: gender icon + name + age + online status */}
                 <View style={styles.cardInfoRow}>
                     <Image source={getGenderAsset(item.gender)} style={styles.cardGenderIcon} />
                     <Text style={styles.cardName} numberOfLines={1}>{item.name}</Text>
                     <Text style={styles.cardAge}>{item.age}</Text>
+                    <View style={{ flex: 1 }} />
+                    <View style={[styles.onlineDotNew, { backgroundColor: item.isOnline ? Colors.online : '#EB3223' }]} />
                 </View>
             </TouchableOpacity>
         );
@@ -165,14 +207,34 @@ export const LikesMeScreen = () => {
                             <View style={styles.modalPhotoContainer}>
                                 <Image
                                     source={{
-                                        uri: selectedUser.photos?.[0] ||
+                                        uri: selectedUser.photos?.[modalPhotoIndex] ||
                                             `https://ui-avatars.com/api/?name=${selectedUser.name}&size=400`
                                     }}
                                     style={styles.modalPhoto}
                                 />
-                                {selectedUser.isOnline && (
+                                {selectedUser.photos && selectedUser.photos.length > 1 && modalPhotoIndex > 0 && (
+                                    <TouchableOpacity
+                                        style={styles.photoNavLeft}
+                                        onPress={() => setModalPhotoIndex(prev => prev - 1)}
+                                    >
+                                        <Text style={styles.photoNavText}>‹</Text>
+                                    </TouchableOpacity>
+                                )}
+                                {selectedUser.photos && selectedUser.photos.length > 1 && modalPhotoIndex < selectedUser.photos.length - 1 && (
+                                    <TouchableOpacity
+                                        style={styles.photoNavRight}
+                                        onPress={() => setModalPhotoIndex(prev => prev + 1)}
+                                    >
+                                        <Text style={styles.photoNavText}>›</Text>
+                                    </TouchableOpacity>
+                                )}
+                                {selectedUser.isOnline ? (
                                     <View style={styles.modalOnlineBadge}>
                                         <Text style={styles.modalOnlineText}>● Online</Text>
+                                    </View>
+                                ) : (
+                                    <View style={[styles.modalOnlineBadge, styles.modalOfflineBadge]}>
+                                        <Text style={[styles.modalOnlineText, styles.modalOfflineText]}>● Offline</Text>
                                     </View>
                                 )}
                             </View>
@@ -194,7 +256,7 @@ export const LikesMeScreen = () => {
                                     </View>
                                 </View>
                                 {selectedUser.location ? (
-                                    <Text style={styles.modalLocation}>📍 {selectedUser.location}</Text>
+                                    <Text style={styles.modalLocation}>{getFlagForLocation(selectedUser.location)} {selectedUser.location}</Text>
                                 ) : null}
                             </View>
 
@@ -218,21 +280,24 @@ export const LikesMeScreen = () => {
                                 </View>
                             )}
 
-                            {/* Additional Photos */}
-                            {selectedUser.photos && selectedUser.photos.length > 1 && (
+                            {/* Basics: MBTI, Enneagram, Looking For */}
+                            {(selectedUser.mbti || selectedUser.enneagram || selectedUser.lookingFor) && (
                                 <View style={styles.modalSection}>
-                                    <Text style={styles.modalSectionTitle}>Photos</Text>
-                                    <View style={styles.modalPhotoGrid}>
-                                        {selectedUser.photos.slice(1).map((photo, idx) => (
-                                            <Image
-                                                key={idx}
-                                                source={{ uri: photo }}
-                                                style={styles.modalGridPhoto}
-                                            />
-                                        ))}
+                                    <Text style={styles.modalSectionTitle}>Basics</Text>
+                                    <View style={styles.modalInterests}>
+                                        {selectedUser.mbti && (
+                                            <InterestTag label={`MBTI: ${selectedUser.mbti}`} size="small" />
+                                        )}
+                                        {selectedUser.enneagram && (
+                                            <InterestTag label={`Enneagram: ${selectedUser.enneagram}`} size="small" />
+                                        )}
+                                        {selectedUser.lookingFor && (
+                                            <InterestTag label={`Looking For: ${selectedUser.lookingFor}`} size="small" />
+                                        )}
                                     </View>
                                 </View>
                             )}
+
                         </ScrollView>
 
                         {/* Action buttons */}
@@ -286,7 +351,7 @@ export const LikesMeScreen = () => {
                     renderItem={renderUserCard}
                     numColumns={3}
                     columnWrapperStyle={likes.length > 1 ? styles.row : undefined}
-                    contentContainerStyle={styles.list}
+                    contentContainerStyle={[styles.list, likes.length === 0 && { flexGrow: 1, justifyContent: 'center' }]}
                     showsVerticalScrollIndicator={false}
                     refreshControl={
                         <RefreshControl
@@ -297,7 +362,6 @@ export const LikesMeScreen = () => {
                     }
                     ListEmptyComponent={() => (
                         <View style={styles.emptyState}>
-                            <Text style={styles.emptyIcon}>💝</Text>
                             <Text style={styles.emptyTitle}>No likes yet</Text>
                             <Text style={styles.emptySubtitle}>Keep swiping to get noticed!</Text>
                         </View>
@@ -387,17 +451,11 @@ const styles = StyleSheet.create({
         ...StyleSheet.absoluteFillObject,
         backgroundColor: 'rgba(0,0,0,0.35)',
     },
-    onlineDot: {
-        position: 'absolute',
-        top: Spacing.sm,
-        right: Spacing.sm,
+    onlineDotNew: {
         width: 10,
         height: 10,
         borderRadius: 5,
-        backgroundColor: Colors.online,
-        borderWidth: 2,
-        borderColor: 'rgba(0,0,0,0.3)',
-        zIndex: 2,
+        marginLeft: Spacing.xs,
     },
     cardInfoRow: {
         position: 'absolute',
@@ -476,6 +534,37 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: BorderRadius.xxl,
         borderTopRightRadius: BorderRadius.xxl,
     },
+    photoNavLeft: {
+        position: 'absolute',
+        top: '50%',
+        left: Spacing.md,
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: -20,
+    },
+    photoNavRight: {
+        position: 'absolute',
+        top: '50%',
+        right: Spacing.md,
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: -20,
+    },
+    photoNavText: {
+        color: Colors.white,
+        fontSize: 32,
+        fontWeight: 'bold',
+        marginTop: -6,
+        marginLeft: 2,
+    },
     modalOnlineBadge: {
         position: 'absolute',
         bottom: Spacing.md,
@@ -490,6 +579,10 @@ const styles = StyleSheet.create({
         fontSize: FontSizes.sm,
         fontFamily: FontFamily.small,
         fontWeight: FontWeights.semiBold,
+    },
+    modalOfflineBadge: {},
+    modalOfflineText: {
+        color: '#EB3223',
     },
     modalInfoSection: {
         padding: Spacing.lg,
@@ -614,7 +707,7 @@ const styles = StyleSheet.create({
     emptyState: {
         alignItems: 'center',
         gap: Spacing.md,
-        marginTop: 150,
+        marginTop: -110,
     },
     emptyIcon: {
         fontSize: 64,

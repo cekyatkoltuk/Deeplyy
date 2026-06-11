@@ -32,3 +32,60 @@ export const COUNTRY_CODES = [
     { name: 'Brazil', dialCode: '+55', code: 'BR', flag: '🇧🇷' },
     { name: 'Argentina', dialCode: '+54', code: 'AR', flag: '🇦🇷' },
 ];
+
+const CITY_TO_COUNTRY: Record<string, string> = {
+    'istanbul': 'TR', 'ankara': 'TR', 'izmir': 'TR', 'bursa': 'TR',
+    'antalya': 'TR', 'bodrum': 'TR', 'trabzon': 'TR', 'adana': 'TR',
+    'new york': 'US', 'los angeles': 'US', 'chicago': 'US', 'miami': 'US',
+    'san francisco': 'US', 'seattle': 'US', 'boston': 'US', 'houston': 'US',
+    'london': 'GB', 'manchester': 'GB', 'birmingham': 'GB', 'edinburgh': 'GB',
+    'paris': 'FR', 'lyon': 'FR', 'marseille': 'FR', 'nice': 'FR',
+    'berlin': 'DE', 'munich': 'DE', 'hamburg': 'DE', 'frankfurt': 'DE',
+    'rome': 'IT', 'milan': 'IT', 'naples': 'IT', 'florence': 'IT',
+    'madrid': 'ES', 'barcelona': 'ES', 'seville': 'ES', 'valencia': 'ES',
+    'amsterdam': 'NL', 'rotterdam': 'NL', 'the hague': 'NL',
+    'moscow': 'RU', 'saint petersburg': 'RU',
+    'tokyo': 'JP', 'osaka': 'JP', 'kyoto': 'JP',
+    'seoul': 'KR', 'busan': 'KR',
+    'dubai': 'AE', 'abu dhabi': 'AE',
+    'sydney': 'AU', 'melbourne': 'AU', 'brisbane': 'AU',
+    'toronto': 'CA', 'vancouver': 'CA', 'montreal': 'CA',
+    'sao paulo': 'BR', 'rio de janeiro': 'BR',
+    'buenos aires': 'AR',
+    'bangkok': 'TH', 'phuket': 'TH',
+    'cairo': 'EG', 'alexandria': 'EG',
+    'stockholm': 'SE', 'gothenburg': 'SE',
+    'zurich': 'CH', 'geneva': 'CH', 'bern': 'CH',
+    'vienna': 'AT', 'salzburg': 'AT',
+    'warsaw': 'PL', 'krakow': 'PL',
+    'athens': 'GR', 'thessaloniki': 'GR',
+    'brussels': 'BE', 'antwerp': 'BE',
+    'lisbon': 'PT', 'porto': 'PT',
+    'doha': 'QA', 'riyadh': 'SA', 'jeddah': 'SA',
+    'manila': 'PH', 'jakarta': 'ID', 'bali': 'ID',
+    'shanghai': 'CN', 'beijing': 'CN', 'mumbai': 'IN', 'delhi': 'IN',
+    'mexico city': 'MX', 'cancun': 'MX',
+};
+
+export const getFlagForLocation = (location?: string | null): string => {
+    if (!location) return '';
+    
+    const locationLower = location.toLowerCase().trim();
+
+    // Check city mapping first
+    for (const [city, code] of Object.entries(CITY_TO_COUNTRY)) {
+        if (locationLower.includes(city)) {
+            const country = COUNTRY_CODES.find(c => c.code === code);
+            if (country) return country.flag;
+        }
+    }
+    
+    // Check country name
+    for (const country of COUNTRY_CODES) {
+        if (locationLower.includes(country.name.toLowerCase())) {
+            return country.flag;
+        }
+    }
+    
+    return '';
+};

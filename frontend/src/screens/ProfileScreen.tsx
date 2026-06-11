@@ -12,6 +12,7 @@ import {
     Alert,
     ImageBackground,
 } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   FontFamily,
@@ -23,6 +24,7 @@ import { Avatar } from '../components/Avatar';
 import { PremiumModal } from '../components/PremiumModal';
 import { AppHeader } from '../components/AppHeader';
 import { useUserStore } from '../store/userStore';
+import { getFlagForLocation } from '../utils/countries';
 import { usePremiumStore } from '../store/premiumStore';
 import { useAuthStore } from '../store/authStore';
 import { INTERESTS, GENDER_OPTIONS, MBTI_OPTIONS, ENNEAGRAM_OPTIONS, LOOKING_FOR_OPTIONS } from '../utils/constants';
@@ -41,8 +43,6 @@ export const ProfileScreen = ({ navigation }: any) => {
     const [editingLookingFor, setEditingLookingFor] = useState(false);
     
     const [bioText, setBioText] = useState(profile.bio);
-    const [showPhotoInput, setShowPhotoInput] = useState(false);
-    const [photoUrl, setPhotoUrl] = useState('');
     const [nameText, setNameText] = useState(profile.name);
 
     useEffect(() => {
@@ -92,13 +92,6 @@ export const ProfileScreen = ({ navigation }: any) => {
         }
     };
 
-    const handleAddPhoto = () => {
-        if (!photoUrl.trim()) return;
-        uploadPhoto(photoUrl.trim());
-        setPhotoUrl('');
-        setShowPhotoInput(false);
-    };
-
     const handleRemovePhoto = (index: number) => {
         if (typeof window !== 'undefined') {
             // Web: use confirm
@@ -121,23 +114,63 @@ export const ProfileScreen = ({ navigation }: any) => {
         updateProfile({ photos } as any);
     };
 
+    const handleAddPhoto = async () => {
+        try {
+            const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+            if (permissionResult.granted === false) {
+                if (typeof window !== 'undefined') {
+                    alert('You need to allow camera roll permissions to add a photo.');
+                } else {
+                    Alert.alert('Permission required', 'You need to allow camera roll permissions to add a photo.');
+                }
+                return;
+            }
+
+            const result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ['images'] as any,
+                allowsEditing: true,
+                aspect: [3, 4],
+                quality: 0.5, // keep quality relatively low to save base64 size
+                base64: true,
+            });
+
+            if (!result.canceled && result.assets && result.assets.length > 0) {
+                const asset = result.assets[0];
+                if (asset.base64) {
+                    const base64Uri = `data:image/jpeg;base64,${asset.base64}`;
+                    await uploadPhoto(base64Uri);
+                } else {
+                    await uploadPhoto(asset.uri);
+                }
+            }
+        } catch (error) {
+            console.error('Image picker error:', error);
+            if (typeof window !== 'undefined') {
+                alert('Failed to pick photo.');
+            } else {
+                Alert.alert('Error', 'Failed to pick photo.');
+            }
+        }
+    };
+
     return (
         <ImageBackground source={require('../../assets/backgrounds/background_3.png')} style={styles.container}>
             <AppHeader titleImage={require('../../assets/titles/title_profile.png')} />
             <ScrollView contentContainerStyle={styles.scrollContent}>
                 {/* Profile Header */}
                 <View style={styles.profileHeader}>
-                    <View style={styles.avatarContainer}>
+                    <TouchableOpacity
+                        style={styles.avatarContainer}
+                        onPress={() => navigation.navigate('UserProfileView', { user: profile })}
+                        activeOpacity={0.8}
+                    >
                         <Avatar
                             uri={profile.photos[0]}
                             size={100}
                             isPremium={isPremium}
                             name={profile.name}
                         />
-                        <TouchableOpacity style={styles.editAvatarBtn} onPress={() => setShowPhotoInput(true)}>
-                            <Text style={styles.editAvatarIcon}>+</Text>
-                        </TouchableOpacity>
-                    </View>
+                    </TouchableOpacity>
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                         <Image 
                             source={
@@ -151,7 +184,7 @@ export const ProfileScreen = ({ navigation }: any) => {
                             {profile.name}, {profile.age}
                         </Text>
                     </View>
-                    <Text style={styles.profileLocation}>📍 {profile.location || 'No location set'}</Text>
+                    <Text style={styles.profileLocation}>{getFlagForLocation(profile.location)} {profile.location || 'No location set'}</Text>
                     {isPremium && (
                         <View style={styles.premiumTag}>
                             <Text style={styles.premiumTagText}> Premium Member</Text>
@@ -251,9 +284,6 @@ export const ProfileScreen = ({ navigation }: any) => {
                 <View style={styles.section}>
                     <View style={styles.sectionHeader}>
                         <Text style={styles.sectionTitle}>Photos</Text>
-                        <TouchableOpacity onPress={() => setShowPhotoInput(true)}>
-                            <Text style={styles.editBtn}>Add</Text>
-                        </TouchableOpacity>
                     </View>
                     <View style={styles.photoGrid}>
                         {profile.photos.map((photo, idx) => (
@@ -288,7 +318,7 @@ export const ProfileScreen = ({ navigation }: any) => {
                             <TouchableOpacity
                                 key={`empty-${idx}`}
                                 style={styles.photoSlot}
-                                onPress={() => setShowPhotoInput(true)}
+                                onPress={handleAddPhoto}
                             >
                                 <Text style={styles.addPhotoIcon}>+</Text>
                             </TouchableOpacity>
@@ -434,37 +464,7 @@ export const ProfileScreen = ({ navigation }: any) => {
                     )}
                 </View>
 
-                {/* Settings Section */}
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Settings</Text>
 
-                    {/* Dev Toggle for Premium */}
-                    <View style={styles.settingRow}>
-                        <Text style={styles.settingText}>Premium (Dev Toggle)</Text>
-                        <Switch
-                            value={isPremium}
-                            onValueChange={togglePremium}
-                            trackColor={{ false: Colors.border, true: Colors.premiumGold }}
-                            thumbColor={Colors.white}
-                        />
-                    </View>
-                </View>
-
-                {/* Subscription Status */}
-                {isPremium && (
-                    <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Subscription</Text>
-                        <View style={styles.subscriptionCard}>
-                            <Text style={styles.subscriptionPlan}>Premium Monthly</Text>
-                            <Text style={styles.subscriptionDate}>
-                                Renews: March 28, 2026
-                            </Text>
-                            <TouchableOpacity>
-                                <Text style={styles.manageSub}>Manage Subscription</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                )}
 
                 {/* Logout */}
                 <View style={styles.logoutContainer}>
@@ -488,39 +488,6 @@ export const ProfileScreen = ({ navigation }: any) => {
                     setShowPremiumModal(false);
                 }}
             />
-
-            {/* Photo URL Input Modal */}
-            <Modal visible={showPhotoInput} transparent animationType="fade">
-                <View style={styles.modalOverlay}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.modalTitle}>Add Photo</Text>
-                        <Text style={styles.modalSubtitle}>Enter a URL for your photo</Text>
-                        <TextInput
-                            style={styles.modalInput}
-                            value={photoUrl}
-                            onChangeText={setPhotoUrl}
-                            placeholder="https://example.com/photo.jpg"
-                            placeholderTextColor={Colors.textMuted}
-                            autoCapitalize="none"
-                            autoFocus
-                        />
-                        <View style={styles.modalActions}>
-                            <TouchableOpacity
-                                style={styles.modalCancelBtn}
-                                onPress={() => { setShowPhotoInput(false); setPhotoUrl(''); }}
-                            >
-                                <Text style={styles.modalCancelText}>Cancel</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={[styles.modalAddBtn, !photoUrl.trim() && styles.modalAddBtnDisabled]}
-                                onPress={handleAddPhoto}
-                            >
-                                <Text style={styles.modalAddText}>Add Photo</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
         </ImageBackground>
     );
 };
@@ -785,32 +752,7 @@ const styles = StyleSheet.create({
         fontSize: FontSizes.xl,
         fontFamily: FontFamily.heading,
     },
-    subscriptionCard: {
-        backgroundColor: Colors.card,
-        borderRadius: BorderRadius.lg,
-        padding: Spacing.md,
-        borderWidth: 1,
-        borderColor: Colors.premiumGold,
-        gap: Spacing.xs,
-    },
-    subscriptionPlan: {
-        color: Colors.premiumGold,
-        fontSize: FontSizes.body,
-        fontFamily: FontFamily.body,
-        fontWeight: FontWeights.semiBold,
-    },
-    subscriptionDate: {
-        color: Colors.textSecondary,
-        fontSize: FontSizes.sm,
-        fontFamily: FontFamily.small,
-    },
-    manageSub: {
-        color: Colors.primary,
-        fontSize: FontSizes.md,
-        fontFamily: FontFamily.small,
-        fontWeight: FontWeights.medium,
-        marginTop: Spacing.xs,
-    },
+
     logoutContainer: {
         paddingHorizontal: Spacing.lg,
         marginTop: Spacing.md,

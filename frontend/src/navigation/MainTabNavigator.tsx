@@ -30,6 +30,11 @@ const DiscoveryNavigator = () => (
             component={DiscoveryFiltersScreen}
             options={{ animation: 'slide_from_bottom' }}
         />
+        <DiscoveryStack.Screen
+            name="UserProfileView"
+            component={UserProfileViewScreen}
+            options={{ animation: 'slide_from_right' }}
+        />
     </DiscoveryStack.Navigator>
 );
 
@@ -55,6 +60,11 @@ const ProfileNavigator = () => (
         <ProfileStack.Screen
             name="BlockedUsers"
             component={BlockedUsersScreen}
+            options={{ animation: 'slide_from_right' }}
+        />
+        <ProfileStack.Screen
+            name="UserProfileView"
+            component={UserProfileViewScreen}
             options={{ animation: 'slide_from_right' }}
         />
     </ProfileStack.Navigator>
@@ -99,7 +109,7 @@ const TabIcon = ({ name, label, focused, badge }: TabIconProps) => {
                 />
                 {badge !== undefined && badge > 0 && (
                     <View style={tabIconStyles.badge}>
-                        <Text style={tabIconStyles.badgeText}>{badge > 9 ? '9+' : badge}</Text>
+                        <Text style={tabIconStyles.badgeText}>{badge}</Text>
                     </View>
                 )}
             </View>
@@ -189,16 +199,13 @@ export const MainTabNavigator = () => {
                 component={DiscoveryNavigator}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <TabIcon name="discover" label="Discover" focused={focused} />
+                        <TabIcon name="discover" label="Connect" focused={focused} />
                     ),
                 }}
             />
             <Tab.Screen
                 name="LikesMeTab"
                 component={LikesMeScreen}
-                listeners={{
-                    tabPress: () => clearLikes(),
-                }}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <TabIcon name="likes" label="Likes" focused={focused} badge={unreadLikes} />
@@ -212,6 +219,7 @@ export const MainTabNavigator = () => {
                     tabPress: () => clearMessages(),
                 }}
                 options={{
+                    unmountOnBlur: true,
                     tabBarIcon: ({ focused }) => (
                         <TabIcon name="chat" label="Chat" focused={focused} badge={unreadMessages} />
                     ),

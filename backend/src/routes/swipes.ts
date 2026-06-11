@@ -118,6 +118,10 @@ router.post('/like', authMiddleware, async (req: AuthRequest, res: Response): Pr
                     isOnline: u.is_online,
                 };
             }
+
+            // Emit new match event to both users
+            io.to(`user:${targetUserId}`).emit('new_match', { matchId });
+            io.to(`user:${req.userId}`).emit('new_match', { matchId });
         }
 
         res.json({ matched, matchId, matchedUser });

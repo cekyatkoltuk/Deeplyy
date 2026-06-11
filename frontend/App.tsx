@@ -15,6 +15,9 @@ import {
 import {
   Karla_700Bold_Italic
 } from '@expo-google-fonts/karla';
+import {
+  MontserratAlternates_800ExtraBold
+} from '@expo-google-fonts/montserrat-alternates';
 
 const AppContent = () => {
   const { loadToken } = useAuthStore();
@@ -24,6 +27,7 @@ const AppContent = () => {
     Archivo_700Bold,
     MuseoModerno_300Light_Italic,
     Karla_700Bold_Italic,
+    MontserratAlternates_800ExtraBold,
   });
 
   useEffect(() => {

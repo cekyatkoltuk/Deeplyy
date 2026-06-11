@@ -52,7 +52,7 @@ router.get('/likes', authMiddleware, async (req: AuthRequest, res: Response): Pr
     try {
         const result = await query(
             `SELECT u.id, u.name, u.age, u.bio, u.photos, u.interests, u.location,
-              u.gender, u.is_premium, u.is_online
+              u.gender, u.is_premium, u.is_online, u.mbti, u.enneagram, u.looking_for
        FROM swipes s
        JOIN users u ON s.swiper_id = u.id
        WHERE s.swiped_id = $1 AND s.direction = 'like'
@@ -72,6 +72,9 @@ router.get('/likes', authMiddleware, async (req: AuthRequest, res: Response): Pr
             interests: user.interests,
             location: user.location,
             gender: user.gender,
+            mbti: user.mbti,
+            enneagram: user.enneagram,
+            lookingFor: user.looking_for,
             isPremium: user.is_premium,
             isOnline: user.is_online,
             distance: Math.floor(Math.random() * 15) + 1,

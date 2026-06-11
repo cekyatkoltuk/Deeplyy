@@ -23,17 +23,18 @@ import { useSwipeStore } from '../store/swipeStore';
 import { useMatchStore } from '../store/matchStore';
 import { usePremiumStore } from '../store/premiumStore';
 import { SWIPE_THRESHOLD } from '../utils/constants';
+import { socketService } from '../services/socket';
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const { width: windowWidth } = Dimensions.get('window');
+const SCREEN_WIDTH = Math.min(windowWidth, 500);
 
 export const DiscoveryScreen = ({ navigation }: any) => {
-    const { cards, currentIndex, loadCards, swipeRight, swipeLeft, rewind, resetDislikes } =
+    const { cards, currentIndex, loadCards, swipeRight, swipeLeft, rewind, resetDislikes, updateUserStatus } =
         useSwipeStore();
     const { addMatch } = useMatchStore();
     const { isPremium, togglePremium } = usePremiumStore();
     const [showPremiumModal, setShowPremiumModal] = useState(false);
-    const [showMatchModal, setShowMatchModal] = useState(false);
-    const [matchedUser, setMatchedUser] = useState<any>(null);
+
 
     const position = new Animated.ValueXY();
     const rotate = position.x.interpolate({
@@ -68,6 +69,16 @@ export const DiscoveryScreen = ({ navigation }: any) => {
 
     useEffect(() => {
         loadCards();
+
+        const handleStatusChange = ({ userId, isOnline }: { userId: string; isOnline: boolean }) => {
+            updateUserStatus(userId, isOnline);
+        };
+
+        socketService.on('user_status_change', handleStatusChange);
+
+        return () => {
+            socketService.off('user_status_change', handleStatusChange);
+        };
     }, []);
 
     const panResponder = PanResponder.create({
@@ -81,6 +92,12 @@ export const DiscoveryScreen = ({ navigation }: any) => {
             } else if (gesture.dx < -SWIPE_THRESHOLD) {
                 swipeOut('left');
             } else {
+                if (Math.abs(gesture.dx) < 10 && Math.abs(gesture.dy) < 10) {
+                    const card = cards[currentIndex];
+                    if (card) {
+                        navigation.navigate('UserProfileView', { user: card });
+                    }
+                }
                 resetPosition();
             }
         },
@@ -97,9 +114,7 @@ export const DiscoveryScreen = ({ navigation }: any) => {
                 const card = cards[currentIndex];
                 const isMatch = await swipeRight(card.id);
                 if (isMatch) {
-                    setMatchedUser(card);
                     addMatch(card);
-                    setShowMatchModal(true);
                 }
             } else {
                 await swipeLeft(cards[currentIndex].id);
@@ -213,64 +228,59 @@ export const DiscoveryScreen = ({ navigation }: any) => {
             {currentCard && (
                 <View style={styles.actions}>
                     <TouchableOpacity
-                        style={[styles.actionBtn, styles.passBtn]}
-                        onPress={handlePass}
+                        style={[styles.actionBtn, styles.smallBtn, styles.rewindBtn]}
+                        onPress={handleRewind}
+                        activeOpacity={0.7}
                     >
-                        <Text style={styles.actionIcon}>✕</Text>
+                        <LinearGradient
+                            colors={['rgba(185,104,204,0.15)', 'rgba(185,104,204,0.05)']}
+                            style={styles.smallBtnGradient}
+                        >
+                            <Text style={[styles.actionIcon, styles.smallIcon, styles.rewindIcon]}>↩</Text>
+                        </LinearGradient>
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        style={[styles.actionBtn, styles.rewindBtn]}
-                        onPress={handleRewind}
+                        style={[styles.actionBtn, styles.passBtn]}
+                        onPress={handlePass}
+                        activeOpacity={0.7}
                     >
-                        <Text style={styles.actionIcon}>↩</Text>
-
+                        <LinearGradient
+                            colors={['rgba(235,50,35,0.15)', 'rgba(235,50,35,0.05)']}
+                            style={styles.actionBtnGradient}
+                        >
+                            <Text style={[styles.actionIcon, styles.passIcon]}>✕</Text>
+                        </LinearGradient>
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         style={[styles.actionBtn, styles.likeBtn]}
                         onPress={handleLike}
+                        activeOpacity={0.7}
                     >
-                        <Text style={styles.actionIcon}>♥</Text>
+                        <LinearGradient
+                            colors={[Colors.primary, Colors.primaryGradientEnd]}
+                            style={styles.likeBtnGradient}
+                        >
+                            <Text style={[styles.actionIcon, styles.likeIcon]}>♥</Text>
+                        </LinearGradient>
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        style={[styles.actionBtn, styles.resetActionBtn]}
+                        style={[styles.actionBtn, styles.smallBtn, styles.resetActionBtn]}
                         onPress={handleReset}
+                        activeOpacity={0.7}
                     >
-                        <Text style={styles.actionIcon}>↻</Text>
-
+                        <LinearGradient
+                            colors={['rgba(185,104,204,0.15)', 'rgba(185,104,204,0.05)']}
+                            style={styles.smallBtnGradient}
+                        >
+                            <Text style={[styles.actionIcon, styles.smallIcon, styles.resetIcon]}>↻</Text>
+                        </LinearGradient>
                     </TouchableOpacity>
                 </View>
             )}
 
-            {/* Match Modal */}
-            <Modal visible={showMatchModal} transparent animationType="fade">
-                <View style={styles.matchModalBackdrop}>
-                    <LinearGradient
-                        colors={['rgba(255,107,107,0.9)', 'rgba(168,85,247,0.9)']}
-                        style={styles.matchModalContent}
-                    >
-
-                        <Text style={styles.matchTitle}>It's a Match!</Text>
-                        <Text style={styles.matchSubtitle}>
-                            You and {matchedUser?.name} liked each other
-                        </Text>
-                        <Button
-                            title="Send a Message"
-                            onPress={() => {
-                                setShowMatchModal(false);
-                                navigation.navigate('ChatTab');
-                            }}
-                            variant="secondary"
-                            size="large"
-                        />
-                        <TouchableOpacity onPress={() => setShowMatchModal(false)}>
-                            <Text style={styles.keepSwiping}>Keep Swiping</Text>
-                        </TouchableOpacity>
-                    </LinearGradient>
-                </View>
-            </Modal>
 
             {/* Premium Modal */}
             <PremiumModal
@@ -336,75 +346,143 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 40,
         zIndex: 10,
-        paddingHorizontal: Spacing.lg,
-        paddingVertical: Spacing.sm,
-        borderRadius: BorderRadius.sm,
+        paddingHorizontal: Spacing.xl,
+        paddingVertical: Spacing.md,
+        borderRadius: BorderRadius.lg,
         borderWidth: 3,
     },
     likeStamp: {
         left: 20,
         borderColor: Colors.like,
+        backgroundColor: 'rgba(185,104,204,0.15)',
         transform: [{ rotate: '-15deg' }],
+        shadowColor: Colors.like,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.6,
+        shadowRadius: 16,
+        elevation: 8,
     },
     nopeStamp: {
         right: 20,
         borderColor: Colors.pass,
+        backgroundColor: 'rgba(235,50,35,0.15)',
         transform: [{ rotate: '15deg' }],
+        shadowColor: Colors.pass,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.6,
+        shadowRadius: 16,
+        elevation: 8,
     },
     stampText: {
-        fontSize: FontSizes.xxl,
+        fontSize: FontSizes.xxxl,
         fontFamily: FontFamily.heading,
         fontWeight: FontWeights.extraBold,
         color: Colors.like,
-        letterSpacing: 3,
+        letterSpacing: 4,
+        textShadowColor: 'rgba(185,104,204,0.5)',
+        textShadowOffset: { width: 0, height: 0 },
+        textShadowRadius: 10,
     },
     nopeText: {
         color: Colors.pass,
+        textShadowColor: 'rgba(235,50,35,0.5)',
     },
     actions: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        gap: Spacing.md,
+        gap: Spacing.lg,
         paddingBottom: Spacing.xl,
         paddingTop: Spacing.md,
     },
     actionBtn: {
-        width: 56,
-        height: 56,
-        borderRadius: 28,
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        overflow: 'hidden',
+        ...Shadows.medium,
+    },
+    actionBtnGradient: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 30,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: Colors.surface,
-        borderWidth: 1,
-        borderColor: Colors.border,
-        ...Shadows.small,
+        borderWidth: 2,
+        borderColor: 'rgba(235,50,35,0.4)',
+    },
+    smallBtn: {
+        width: 48,
+        height: 48,
+        borderRadius: 24,
+    },
+    smallBtnGradient: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 24,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth: 1.5,
+        borderColor: 'rgba(185,104,204,0.35)',
     },
     passBtn: {
-        backgroundColor: Colors.surface,
-        borderColor: Colors.pass,
+        shadowColor: Colors.pass,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.35,
+        shadowRadius: 10,
+        elevation: 6,
     },
     rewindBtn: {
-        width: 46,
-        height: 46,
-        borderRadius: 23,
+        shadowColor: Colors.accent,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.25,
+        shadowRadius: 8,
+        elevation: 4,
     },
     likeBtn: {
-        backgroundColor: Colors.surface,
-        borderColor: Colors.like,
-        width: 64,
-        height: 64,
-        borderRadius: 32,
+        width: 72,
+        height: 72,
+        borderRadius: 36,
+        shadowColor: Colors.primary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.5,
+        shadowRadius: 14,
+        elevation: 8,
+    },
+    likeBtnGradient: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 36,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     resetActionBtn: {
-        width: 46,
-        height: 46,
-        borderRadius: 23,
+        shadowColor: Colors.accent,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.25,
+        shadowRadius: 8,
+        elevation: 4,
     },
     actionIcon: {
-        fontSize: 24,
+        fontSize: 26,
         fontFamily: FontFamily.heading,
-    
+    },
+    passIcon: {
+        color: Colors.pass,
+        fontSize: 24,
+    },
+    smallIcon: {
+        fontSize: 20,
+    },
+    rewindIcon: {
+        color: Colors.accent,
+    },
+    likeIcon: {
+        color: Colors.white,
+        fontSize: 30,
+    },
+    resetIcon: {
+        color: Colors.accent,
     },
     actionLock: {
         position: 'absolute',
@@ -412,7 +490,6 @@ const styles = StyleSheet.create({
         right: -4,
         fontSize: 12,
         fontFamily: FontFamily.small,
-    
     },
     emptyState: {
         alignItems: 'center',

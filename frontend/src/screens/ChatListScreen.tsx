@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { FontFamily } from '../utils/theme';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, ImageBackground, ActivityIndicator } from 'react-native';
 import { Colors, FontSizes, FontWeights, Spacing } from '../utils/theme';
 import { ConversationItem } from '../components/ConversationItem';
 import { AppHeader } from '../components/AppHeader';
 import { useChatStore } from '../store/chatStore';
+import { socketService } from '../services/socket';
 
 export const ChatListScreen = ({ navigation }: any) => {
     const { conversations, loadConversations, isLoading } = useChatStore();
@@ -12,6 +13,14 @@ export const ChatListScreen = ({ navigation }: any) => {
     useEffect(() => {
         loadConversations();
     }, []);
+
+    // Also reload whenever the screen comes into focus
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            loadConversations();
+        });
+        return unsubscribe;
+    }, [navigation]);
 
     return (
         <ImageBackground source={require('../../assets/backgrounds/background_1.png')} style={styles.container}>
@@ -24,36 +33,42 @@ export const ChatListScreen = ({ navigation }: any) => {
                 </Text>
             </View>
 
-            <FlatList
-                data={conversations}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                    <ConversationItem
-                        conversation={item}
-                        onPress={() =>
-                            navigation.navigate('ChatRoom', {
-                                conversationId: item.id,
-                                userName: item.user.name,
-                                userPhoto: item.user.photos?.[0],
-                                isOnline: item.user.isOnline,
-                                userProfile: item.user,
-                                isBlockedByMe: item.isBlockedByMe || false,
-                            })
-                        }
-                    />
-                )}
-                ItemSeparatorComponent={() => <View style={styles.separator} />}
-                contentContainerStyle={conversations.length === 0 ? styles.empty : undefined}
-                ListEmptyComponent={() => (
-                    <View style={styles.emptyState}>
+            {isLoading && conversations.length === 0 ? (
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color={Colors.primary} />
+                </View>
+            ) : (
+                <FlatList
+                    data={conversations}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => (
+                        <ConversationItem
+                            conversation={item}
+                            onPress={() =>
+                                navigation.navigate('ChatRoom', {
+                                    conversationId: item.id,
+                                    userName: item.user.name,
+                                    userPhoto: item.user.photos?.[0],
+                                    isOnline: item.user.isOnline,
+                                    userProfile: item.user,
+                                    isBlockedByMe: item.isBlockedByMe || false,
+                                })
+                            }
+                        />
+                    )}
+                    ItemSeparatorComponent={() => <View style={styles.separator} />}
+                    contentContainerStyle={conversations.length === 0 ? styles.empty : undefined}
+                    ListEmptyComponent={() => (
+                        <View style={styles.emptyState}>
 
-                        <Text style={styles.emptyTitle}>No messages yet</Text>
-                        <Text style={styles.emptySubtitle}>
-                            Match with someone to start chatting!
-                        </Text>
-                    </View>
-                )}
-            />
+                            <Text style={styles.emptyTitle}>No messages yet</Text>
+                            <Text style={styles.emptySubtitle}>
+                                Match with someone to start chatting!
+                            </Text>
+                        </View>
+                    )}
+                />
+            )}
         </ImageBackground>
     );
 };
@@ -90,6 +105,11 @@ const styles = StyleSheet.create({
     },
     empty: {
         flex: 1,
+    },
+    loadingContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     emptyState: {
         alignItems: 'center',

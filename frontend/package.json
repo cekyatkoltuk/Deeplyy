@@ -12,6 +12,7 @@
     "@expo-google-fonts/archivo": "^0.4.2",
     "@expo-google-fonts/karla": "^0.4.2",
     "@expo-google-fonts/montserrat": "^0.4.2",
+    "@expo-google-fonts/montserrat-alternates": "^0.4.1",
     "@expo-google-fonts/museomoderno": "^0.4.2",
     "@expo/metro-runtime": "~55.0.6",
     "@expo/vector-icons": "^15.0.2",

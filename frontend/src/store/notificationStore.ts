@@ -9,6 +9,7 @@ interface NotificationState {
     incrementMessages: () => void;
     clearLikes: () => void;
     clearMessages: () => void;
+    setUnreadLikes: (count: number) => void;
 }
 
 export const useNotificationStore = create<NotificationState>((set) => ({
@@ -41,4 +42,5 @@ export const useNotificationStore = create<NotificationState>((set) => ({
     incrementMessages: () => set((state) => ({ unreadMessages: state.unreadMessages + 1 })),
     clearLikes: () => set({ unreadLikes: 0 }),
     clearMessages: () => set({ unreadMessages: 0 }),
+    setUnreadLikes: (count: number) => set({ unreadLikes: count }),
 }));

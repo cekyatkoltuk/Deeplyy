@@ -11,15 +11,11 @@ import {
 import { Colors, FontSizes, FontWeights, Spacing, BorderRadius } from '../utils/theme';
 import { Button } from '../components/Button';
 import { useAuthStore } from '../store/authStore';
+import { usePremiumStore } from '../store/premiumStore';
 
 export const SettingsScreen = ({ navigation }: any) => {
     const { logout } = useAuthStore();
-    const [notifications, setNotifications] = useState(true);
-    const [matchNotifications, setMatchNotifications] = useState(true);
-    const [messageNotifications, setMessageNotifications] = useState(true);
-    const [distanceUnit, setDistanceUnit] = useState<'km' | 'mi'>('km');
-    const [showOnline, setShowOnline] = useState(true);
-
+    const { isPremium, togglePremium } = usePremiumStore();
     return (
         <View style={styles.container}>
             {/* Header */}
@@ -32,82 +28,35 @@ export const SettingsScreen = ({ navigation }: any) => {
             </View>
 
             <ScrollView contentContainerStyle={styles.scrollContent}>
-                {/* Notifications */}
+                {/* Dev Settings */}
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Notifications</Text>
+                    <Text style={styles.sectionTitle}>Developer Settings</Text>
                     <View style={styles.settingRow}>
-                        <Text style={styles.settingText}>Push Notifications</Text>
+                        <Text style={styles.settingText}>Premium (Dev Toggle)</Text>
                         <Switch
-                            value={notifications}
-                            onValueChange={setNotifications}
-                            trackColor={{ false: Colors.border, true: Colors.primary }}
-                            thumbColor={Colors.white}
-                        />
-                    </View>
-                    <View style={styles.settingRow}>
-                        <Text style={styles.settingText}>New Matches</Text>
-                        <Switch
-                            value={matchNotifications}
-                            onValueChange={setMatchNotifications}
-                            trackColor={{ false: Colors.border, true: Colors.primary }}
-                            thumbColor={Colors.white}
-                        />
-                    </View>
-                    <View style={styles.settingRow}>
-                        <Text style={styles.settingText}>Messages</Text>
-                        <Switch
-                            value={messageNotifications}
-                            onValueChange={setMessageNotifications}
+                            value={isPremium}
+                            onValueChange={togglePremium}
                             trackColor={{ false: Colors.border, true: Colors.primary }}
                             thumbColor={Colors.white}
                         />
                     </View>
                 </View>
 
-                {/* Preferences */}
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Preferences</Text>
-                    <View style={styles.settingRow}>
-                        <Text style={styles.settingText}>Distance Unit</Text>
-                        <View style={styles.segmentControl}>
-                            <TouchableOpacity
-                                style={[styles.segment, distanceUnit === 'km' && styles.segmentActive]}
-                                onPress={() => setDistanceUnit('km')}
-                            >
-                                <Text
-                                    style={[
-                                        styles.segmentText,
-                                        distanceUnit === 'km' && styles.segmentTextActive,
-                                    ]}
-                                >
-                                    km
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={[styles.segment, distanceUnit === 'mi' && styles.segmentActive]}
-                                onPress={() => setDistanceUnit('mi')}
-                            >
-                                <Text
-                                    style={[
-                                        styles.segmentText,
-                                        distanceUnit === 'mi' && styles.segmentTextActive,
-                                    ]}
-                                >
-                                    mi
-                                </Text>
+                {/* Subscription Status */}
+                {isPremium && (
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>Subscription</Text>
+                        <View style={styles.subscriptionCard}>
+                            <Text style={styles.subscriptionPlan}>Premium Monthly</Text>
+                            <Text style={styles.subscriptionDate}>
+                                Renews: March 28, 2026
+                            </Text>
+                            <TouchableOpacity>
+                                <Text style={styles.manageSub}>Manage Subscription</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={styles.settingRow}>
-                        <Text style={styles.settingText}>Show Online Status</Text>
-                        <Switch
-                            value={showOnline}
-                            onValueChange={setShowOnline}
-                            trackColor={{ false: Colors.border, true: Colors.primary }}
-                            thumbColor={Colors.white}
-                        />
-                    </View>
-                </View>
+                )}
 
                 {/* Account */}
                 <View style={styles.section}>
@@ -124,19 +73,15 @@ export const SettingsScreen = ({ navigation }: any) => {
                         <Text style={styles.settingText}>Change Password</Text>
                         <Text style={styles.arrow}>›</Text>
                     </TouchableOpacity>
-                </View>
-
-                {/* Danger Zone */}
-                <View style={styles.section}>
-                    <Text style={[styles.sectionTitle, styles.dangerTitle]}>
-                        Danger Zone
-                    </Text>
                     <TouchableOpacity style={styles.settingRow}>
                         <Text style={styles.dangerText}>Delete Account</Text>
                         <Text style={styles.arrow}>›</Text>
                     </TouchableOpacity>
                 </View>
+            </ScrollView>
 
+            {/* Fixed Footer */}
+            <View style={styles.footer}>
                 <Button
                     title="Log Out"
                     onPress={logout}
@@ -145,7 +90,7 @@ export const SettingsScreen = ({ navigation }: any) => {
                     fullWidth
                     style={styles.logoutBtn}
                 />
-            </ScrollView>
+            </View>
         </View>
     );
 };
@@ -212,38 +157,46 @@ const styles = StyleSheet.create({
         fontSize: FontSizes.xl,
         fontFamily: FontFamily.heading,
     },
-    segmentControl: {
-        flexDirection: 'row',
-        backgroundColor: Colors.surfaceLight,
-        borderRadius: BorderRadius.sm,
-        overflow: 'hidden',
-    },
-    segment: {
-        paddingHorizontal: Spacing.md,
-        paddingVertical: Spacing.sm,
-    },
-    segmentActive: {
-        backgroundColor: Colors.primary,
-    },
-    segmentText: {
-        color: Colors.textMuted,
-        fontSize: FontSizes.md,
-        fontFamily: FontFamily.small,
-        fontWeight: FontWeights.medium,
-    },
-    segmentTextActive: {
-        color: Colors.white,
-    },
-    dangerTitle: {
-        color: Colors.error,
-    },
     dangerText: {
         color: Colors.error,
         fontSize: FontSizes.body,
         fontFamily: FontFamily.body,
         flex: 1,
     },
+    footer: {
+        padding: Spacing.lg,
+        paddingBottom: Spacing.xxl,
+        borderTopWidth: 1,
+        borderTopColor: Colors.border,
+        backgroundColor: Colors.surface,
+    },
     logoutBtn: {
-        marginTop: Spacing.md,
+        marginTop: 0,
+    },
+    subscriptionCard: {
+        backgroundColor: Colors.card,
+        borderRadius: BorderRadius.lg,
+        padding: Spacing.md,
+        borderWidth: 1,
+        borderColor: Colors.premiumGold,
+        gap: Spacing.xs,
+    },
+    subscriptionPlan: {
+        color: Colors.premiumGold,
+        fontSize: FontSizes.body,
+        fontFamily: FontFamily.body,
+        fontWeight: FontWeights.semiBold,
+    },
+    subscriptionDate: {
+        color: Colors.textSecondary,
+        fontSize: FontSizes.sm,
+        fontFamily: FontFamily.small,
+    },
+    manageSub: {
+        color: Colors.primary,
+        fontSize: FontSizes.md,
+        fontFamily: FontFamily.small,
+        fontWeight: FontWeights.medium,
+        marginTop: Spacing.xs,
     },
 });

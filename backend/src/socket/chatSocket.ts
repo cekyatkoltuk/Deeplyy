@@ -25,6 +25,9 @@ export const setupChatSocket = (io: Server) => {
         // Set user online
         query('UPDATE users SET is_online = TRUE, last_seen = NOW() WHERE id = $1', [userId]);
 
+        // Broadcast status change to all connected clients
+        io.emit('user_status_change', { userId, isOnline: true });
+
         // Join personal room
         socket.join(`user:${userId}`);
 
@@ -121,6 +124,9 @@ export const setupChatSocket = (io: Server) => {
         socket.on('disconnect', () => {
             console.log(`User disconnected: ${userId}`);
             query('UPDATE users SET is_online = FALSE, last_seen = NOW() WHERE id = $1', [userId]);
+
+            // Broadcast status change to all connected clients
+            io.emit('user_status_change', { userId, isOnline: false });
         });
     });
 };

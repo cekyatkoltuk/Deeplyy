@@ -1,8 +1,10 @@
 import { Router, Response } from 'express';
+import { Server } from 'socket.io';
 import { query } from '../config/database';
 import { authMiddleware, AuthRequest } from '../middleware/auth';
 
-const router = Router();
+export default function chatRoutes(io: Server) {
+    const router = Router();
 
 // GET /api/chat/conversations — list all conversations
 router.get('/conversations', authMiddleware, async (req: AuthRequest, res: Response): Promise<void> => {
@@ -155,18 +157,25 @@ router.post('/messages/:matchId', authMiddleware, async (req: AuthRequest, res: 
         );
 
         const msg = result.rows[0];
-        res.status(201).json({
+        const formattedMsg = {
             id: msg.id,
             senderId: msg.sender_id,
             text: msg.text,
             type: msg.type,
             read: msg.is_read,
             timestamp: msg.created_at,
-        });
+        };
+
+        // Emit real-time events to the receiver and the room
+        io.to(`match:${matchId}`).emit('new_message', { matchId, message: formattedMsg });
+        io.to(`user:${otherUserId}`).emit('message_notification', { matchId, message: formattedMsg });
+
+        res.status(201).json(formattedMsg);
     } catch (error) {
         console.error('Send message error:', error);
         res.status(500).json({ error: 'Server error' });
     }
 });
 
-export default router;
+    return router;
+}

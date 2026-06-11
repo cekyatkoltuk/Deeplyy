@@ -10,6 +10,7 @@ interface SwipeState {
     swipeLeft: (userId: string) => Promise<void>;
     rewind: () => Promise<void>;
     resetDislikes: () => Promise<void>;
+    updateUserStatus: (userId: string, isOnline: boolean) => void;
 }
 
 export const useSwipeStore = create<SwipeState>((set, get) => ({
@@ -69,5 +70,13 @@ export const useSwipeStore = create<SwipeState>((set, get) => ({
         } catch (error: any) {
             console.error('Reset error:', error.response?.data?.error || error);
         }
+    },
+
+    updateUserStatus: (userId: string, isOnline: boolean) => {
+        set((state) => ({
+            cards: state.cards.map((c) =>
+                c.id === userId ? { ...c, isOnline } : c
+            ),
+        }));
     },
 }));

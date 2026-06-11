@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import api from '../services/api';
+import api, { setCachedToken } from '../services/api';
 
 interface AuthState {
     isAuthenticated: boolean;
@@ -27,6 +27,7 @@ export const useAuthStore = create<AuthState>((set) => ({
             const { token, refreshToken, user } = res.data;
 
             await AsyncStorage.setItem('token', token);
+            setCachedToken(token);
             await AsyncStorage.setItem('refreshToken', refreshToken);
             await AsyncStorage.setItem('userId', user.id);
             await AsyncStorage.setItem('onboardingComplete', 'true');
@@ -53,6 +54,7 @@ export const useAuthStore = create<AuthState>((set) => ({
             const { token, refreshToken, user } = res.data;
 
             await AsyncStorage.setItem('token', token);
+            setCachedToken(token);
             await AsyncStorage.setItem('refreshToken', refreshToken);
             await AsyncStorage.setItem('userId', user.id);
 
@@ -72,6 +74,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     },
 
     logout: async () => {
+        setCachedToken(null);
         await AsyncStorage.multiRemove(['token', 'refreshToken', 'userId', 'onboardingComplete']);
         set({
             isAuthenticated: false,
@@ -94,6 +97,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         const userId = await AsyncStorage.getItem('userId');
         const onboardingComplete = await AsyncStorage.getItem('onboardingComplete');
         if (token && userId && onboardingComplete === 'true') {
+            setCachedToken(token);
             set({ isAuthenticated: true, token, userId });
         }
     },
